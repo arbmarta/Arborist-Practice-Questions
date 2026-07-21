@@ -69,7 +69,7 @@ a { color: var(--accent-dark); }
 h1, h2, h3 { line-height: 1.15; }
 h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.6rem); }
 h2 { margin-top: 0; }
-.intro { max-width: 760px; color: var(--muted); font-size: 1.08rem; }
+.intro { color: var(--muted); font-size: 1.08rem; }
 
 .card {
   background: var(--surface);
