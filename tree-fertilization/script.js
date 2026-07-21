@@ -237,8 +237,9 @@
     hint.hidden = !hint.hidden;
     if (!hint.hidden) {
       hint.textContent =
-        `Nutrient mass (${practiceUnit}) = bag mass (${practiceUnit}) \u00d7 nutrient percentage \u00f7 100. ` +
-        "The three numbers on a fertilizer label are always listed as % nitrogen \u2013 % available phosphate \u2013 % soluble potash.";
+        `Hint 1: The three numbers on a fertilizer label are always listed as % nitrogen \u2013 % available phosphate \u2013 % soluble potash.
+
+Hint 2: Nutrient mass (${practiceUnit}) = bag mass (${practiceUnit}) \u00d7 nutrient percentage \u00f7 100.`;
     }
   }
 
