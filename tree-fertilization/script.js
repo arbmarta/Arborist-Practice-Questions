@@ -7,14 +7,15 @@
   // ---- Data -----------------------------------------------------------
 
   // Pool of possible practice rows; 3 are drawn at random each time the page
-  // loads or "Reset" is clicked. Weights are whole numbers in kg (multiples of
-  // 2 or 5, between 10 and 25); lb is the derived, possibly-decimal value.
+  // loads or "Reset" is clicked. Each row has its own whole-number weight for
+  // kg and for lb (not a unit conversion of each other) so both views always
+  // show clean numbers.
   const practicePool = [
-    { weightKg: 10, n: 10, p: 5, k: 5 },
-    { weightKg: 12, n: 16, p: 4, k: 8 },
-    { weightKg: 16, n: 12, p: 12, k: 12 },
-    { weightKg: 20, n: 20, p: 0, k: 10 },
-    { weightKg: 25, n: 8, p: 2, k: 6 },
+    { weightKg: 10, weightLb: 20, n: 10, p: 5, k: 5 },
+    { weightKg: 12, weightLb: 25, n: 16, p: 4, k: 8 },
+    { weightKg: 16, weightLb: 30, n: 12, p: 12, k: 12 },
+    { weightKg: 20, weightLb: 40, n: 20, p: 0, k: 10 },
+    { weightKg: 25, weightLb: 50, n: 8, p: 2, k: 6 },
   ];
   const PRACTICE_ROW_COUNT = 3;
   let practiceRowsState = [];
@@ -68,12 +69,12 @@
     return round1((weightInPracticeUnit(kgWeight) * percent) / 100);
   }
 
-  function weightPoolInUnit(weightKg) {
-    return practiceUnit === "kg" ? weightKg : round1(weightKg / KG_PER_LB);
+  function weightPoolInUnit(row) {
+    return practiceUnit === "kg" ? row.weightKg : row.weightLb;
   }
 
-  function nutrientAmountPool(weightKg, percent) {
-    return round1((weightPoolInUnit(weightKg) * percent) / 100);
+  function nutrientAmountPool(row, percent) {
+    return round1((weightPoolInUnit(row) * percent) / 100);
   }
 
   // ---- Build practice table -------------------------------------------
@@ -108,7 +109,7 @@
     practiceRowsState.forEach((row, index) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${weightPoolInUnit(row.weightKg)}</td>
+        <td>${weightPoolInUnit(row)}</td>
         <td>${row.n}–${row.p}–${row.k}</td>
         <td><input class="answer-input" type="number" step="0.1" inputmode="decimal"
              aria-label="Amount of nitrogen in ${practiceUnit} for row ${index + 1}" data-row="${index}" data-field="n"></td>
@@ -133,7 +134,7 @@
           `input[data-row="${index}"][data-field="${field}"]`
         );
         if (!input) return;
-        const expected = nutrientAmountPool(row.weightKg, row[field]);
+        const expected = nutrientAmountPool(row, row[field]);
         const raw = input.value.trim();
         input.classList.remove("correct", "incorrect");
 
