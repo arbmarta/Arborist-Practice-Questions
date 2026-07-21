@@ -194,11 +194,152 @@
     }
   }
 
+  // ---- Read-the-label quiz (rotating bag images, kg/lb toggle) ----------
+
+  // Filenames encode guaranteed analysis as N-P-K; all bags are 50 lb net weight
+  const bagFiles = ["20-17-8.png", "30-12-10.png", "25-8-6.png"];
+  const BAG_WEIGHT_LB = 50;
+  const KG_PER_LB = 0.45359237;
+
+  const nutrientNames = { n: "nitrogen", p: "available phosphate", k: "soluble potash" };
+  const nutrientKeys = ["n", "p", "k"];
+
+  let unit = "lb"; // "lb" or "kg"
+  let quizState = null; // { file, values: {n,p,k}, q1Key, q2Key, q3Key }
+
+  function parseBagFile(file) {
+    const [n, p, k] = file.replace(".png", "").split("-").map(Number);
+    return { n, p, k };
+  }
+
+  function pickRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function bagWeightInUnit() {
+    return unit === "lb" ? BAG_WEIGHT_LB : round1(BAG_WEIGHT_LB * KG_PER_LB);
+  }
+
+  function amountFor(key) {
+    return round1((bagWeightInUnit() * quizState.values[key]) / 100);
+  }
+
+  function buildQuizState() {
+    const file = pickRandom(bagFiles);
+    const values = parseBagFile(file);
+    const q1Key = pickRandom(nutrientKeys);
+    const q2Key = pickRandom(nutrientKeys);
+    const remaining = nutrientKeys.filter((k) => k !== q2Key);
+    const q3Key = pickRandom(remaining);
+    return { file, values, q1Key, q2Key, q3Key };
+  }
+
+  function renderQuiz() {
+    const bagImage = document.getElementById("bagImage");
+    if (bagImage) {
+      bagImage.src = quizState.file;
+      bagImage.alt = `Fertilizer bag labeled ${quizState.values.n}-${quizState.values.p}-${quizState.values.k}, net weight ${BAG_WEIGHT_LB} lb`;
+    }
+
+    const q1Label = document.getElementById("q1Label");
+    if (q1Label) q1Label.textContent = `What percentage of the guaranteed analysis is ${nutrientNames[quizState.q1Key]}?`;
+
+    const q2Label = document.getElementById("q2Label");
+    if (q2Label) q2Label.textContent = `How many ${unit} of ${nutrientNames[quizState.q2Key]} are in this bag?`;
+
+    const q3Label = document.getElementById("q3Label");
+    if (q3Label) q3Label.textContent = `How many ${unit} of ${nutrientNames[quizState.q3Key]} are in this bag?`;
+
+    const q1Suffix = document.getElementById("q1Suffix");
+    if (q1Suffix) q1Suffix.textContent = "%";
+    const q2Suffix = document.getElementById("q2Suffix");
+    if (q2Suffix) q2Suffix.textContent = unit;
+    const q3Suffix = document.getElementById("q3Suffix");
+    if (q3Suffix) q3Suffix.textContent = unit;
+
+    ["q1Answer", "q2Answer", "q3Answer"].forEach((id) => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.value = "";
+        input.classList.remove("correct", "incorrect");
+      }
+    });
+    const labelFeedback = document.getElementById("labelFeedback");
+    if (labelFeedback) {
+      labelFeedback.textContent = "";
+      labelFeedback.classList.remove("good", "needs-work");
+    }
+  }
+
+  function newLabelQuiz() {
+    quizState = buildQuizState();
+    renderQuiz();
+  }
+
+  function setUnit(nextUnit) {
+    unit = nextUnit;
+    const unitToggle = document.getElementById("unitToggle");
+    if (unitToggle) unitToggle.setAttribute("aria-checked", unit === "kg" ? "true" : "false");
+    const lbLabel = document.getElementById("unitLabelLb");
+    const kgLabel = document.getElementById("unitLabelKg");
+    if (lbLabel) lbLabel.classList.toggle("active", unit === "lb");
+    if (kgLabel) kgLabel.classList.toggle("active", unit === "kg");
+    renderQuiz();
+  }
+
+  function toggleUnit() {
+    setUnit(unit === "lb" ? "kg" : "lb");
+  }
+
+  function checkLabel() {
+    if (!quizState) return;
+    const labelFeedback = document.getElementById("labelFeedback");
+    const checks = [
+      { id: "q1Answer", expected: quizState.values[quizState.q1Key], tolerance: 0 },
+      { id: "q2Answer", expected: amountFor(quizState.q2Key), tolerance: 0.05 },
+      { id: "q3Answer", expected: amountFor(quizState.q3Key), tolerance: 0.05 },
+    ];
+    let correctCount = 0;
+    let answeredCount = 0;
+
+    checks.forEach(({ id, expected, tolerance }) => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      const raw = input.value.trim();
+      input.classList.remove("correct", "incorrect");
+      if (raw === "") return;
+      answeredCount += 1;
+      const given = parseFloat(raw);
+      if (!isNaN(given) && Math.abs(given - expected) <= tolerance + 0.001) {
+        input.classList.add("correct");
+        correctCount += 1;
+      } else {
+        input.classList.add("incorrect");
+      }
+    });
+
+    if (labelFeedback) {
+      labelFeedback.classList.remove("good", "needs-work");
+      if (answeredCount === 0) {
+        labelFeedback.textContent = "Enter a value for each question, then check again.";
+        labelFeedback.classList.add("needs-work");
+      } else if (correctCount === checks.length) {
+        labelFeedback.textContent = "All correct! That's how the label reads.";
+        labelFeedback.classList.add("good");
+      } else {
+        labelFeedback.textContent = `${correctCount} of ${checks.length} correct. Check the highlighted boxes against the label.`;
+        labelFeedback.classList.add("needs-work");
+      }
+    }
+  }
+
   // ---- Wire up events ---------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", () => {
     buildPracticeTable();
     buildBagQuestions();
+    newLabelQuiz();
+    setUnit(unit);
 
     document.getElementById("checkButton").addEventListener("click", checkPractice);
     document.getElementById("resetButton").addEventListener("click", resetPractice);
@@ -206,5 +347,9 @@
 
     document.getElementById("checkBagsButton").addEventListener("click", checkBags);
     document.getElementById("resetBagsButton").addEventListener("click", resetBags);
+
+    document.getElementById("checkLabelButton").addEventListener("click", checkLabel);
+    document.getElementById("resetLabelButton").addEventListener("click", newLabelQuiz);
+    document.getElementById("unitToggle").addEventListener("click", toggleUnit);
   });
 })();
