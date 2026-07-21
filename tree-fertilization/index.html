@@ -28,11 +28,11 @@
         <p><strong>Nutrient mass = bag mass × nutrient percentage ÷ 100</strong></p>
         <div class="example">
           <h3>Worked example</h3>
-          <p>A 20 kg bag of 10–6–3 fertilizer contains:</p>
+          <p id="workedExampleIntro">A 20 kg bag of 10–6–3 fertilizer contains:</p>
           <ul>
-            <li>Nitrogen: 20 × 10 ÷ 100 = <strong>2.0 kg</strong></li>
-            <li>Available phosphate: 20 × 6 ÷ 100 = <strong>1.2 kg</strong></li>
-            <li>Soluble potash: 20 × 3 ÷ 100 = <strong>0.6 kg</strong></li>
+            <li id="workedExampleN">Nitrogen: 20 × 10 ÷ 100 = <strong>2.0 kg</strong></li>
+            <li id="workedExampleP">Available phosphate: 20 × 6 ÷ 100 = <strong>1.2 kg</strong></li>
+            <li id="workedExampleK">Soluble potash: 20 × 3 ÷ 100 = <strong>0.6 kg</strong></li>
           </ul>
         </div>
       </section>
@@ -84,7 +84,7 @@
 
       <section class="card" aria-labelledby="practice-heading">
         <div class="section-heading">
-          <div><h2 id="practice-heading">Complete the Table</h2><p id="practiceUnitHint">Enter answers in kilograms. Decimals are allowed.</p></div>
+          <div><h2 id="practice-heading">Complete the table</h2><p id="practiceUnitHint">Enter answers in kilograms. Decimals are allowed.</p></div>
           <div class="unit-toggle" role="group" aria-label="Units for the practice table">
             <span id="practiceUnitLabelKg" class="unit-toggle-label">kg</span>
             <button type="button" id="practiceUnitToggle" class="switch" role="switch" aria-checked="false" aria-label="Toggle practice table units between kilograms and pounds"></button>
@@ -94,6 +94,15 @@
         <div class="table-wrap">
           <table>
             <thead><tr><th id="colWeightHeader">Bag weight</th><th>Guaranteed analysis</th><th id="colNHeader">kg of N</th><th id="colPHeader">kg of available phosphate</th><th id="colKHeader">kg of soluble potash</th></tr></thead>
+            <tbody id="exampleRowBody">
+              <tr class="example-row">
+                <td id="exampleWeightCell">20 kg</td>
+                <td id="exampleAnalysisCell">10&ndash;6&ndash;3</td>
+                <td id="exampleNCell">2.0</td>
+                <td id="examplePCell">1.2</td>
+                <td id="exampleKCell">0.6</td>
+              </tr>
+            </tbody>
             <tbody id="practiceRows"></tbody>
           </table>
         </div>
