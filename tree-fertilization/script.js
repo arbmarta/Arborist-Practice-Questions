@@ -6,22 +6,34 @@
 
   // ---- Data -----------------------------------------------------------
 
-  // Each row: bag weight (kg), guaranteed analysis N-P-K (as printed on the label)
-  // Note: the 20 kg 10-6-3 bag is intentionally left out here since it's shown
-  // pre-filled as the example row at the top of the table.
-  const practiceData = [
-    { bag: 25, n: 16, p: 4, k: 8 },
-    { bag: 50, n: 20, p: 0, k: 10 },
-    { bag: 20, n: 12, p: 12, k: 12 },
-    { bag: 30, n: 8, p: 2, k: 6 },
+  // Pool of possible practice rows; 3 are drawn at random each time the page
+  // loads or "Reset" is clicked. Weights are whole numbers in lb (the bag's
+  // native printed weight); kg is the derived, possibly-decimal value.
+  const practicePool = [
+    { weightLb: 5, n: 10, p: 5, k: 5 },
+    { weightLb: 10, n: 16, p: 4, k: 8 },
+    { weightLb: 15, n: 12, p: 12, k: 12 },
+    { weightLb: 20, n: 20, p: 0, k: 10 },
+    { weightLb: 22, n: 8, p: 2, k: 6 },
   ];
+  const PRACTICE_ROW_COUNT = 3;
+  let practiceRowsState = [];
 
-  // Each question: total actual N (kg) needed, bag weight (kg), N% on that bag's label
-  const bagData = [
-    { needKg: 5, bagWeight: 20, nPercent: 10 },
-    { needKg: 8, bagWeight: 25, nPercent: 16 },
-    { needKg: 12, bagWeight: 50, nPercent: 20 },
+  // Pool of "how many bags" challenge scenarios, covering N, P, and K.
+  // 2 are drawn at random each time the page loads or the challenge is reset.
+  const bagChallengePool = [
+    { nutrient: "n", needKg: 5, bagWeight: 20, percent: 10 },
+    { nutrient: "n", needKg: 8, bagWeight: 25, percent: 16 },
+    { nutrient: "n", needKg: 12, bagWeight: 50, percent: 20 },
+    { nutrient: "p", needKg: 3, bagWeight: 20, percent: 6 },
+    { nutrient: "p", needKg: 4, bagWeight: 25, percent: 4 },
+    { nutrient: "k", needKg: 2, bagWeight: 30, percent: 6 },
   ];
+  const BAG_QUESTION_COUNT = 2;
+  let currentBagQuestions = [];
+
+  const nutrientNames = { n: "nitrogen", p: "available phosphate", k: "soluble potash" };
+  const nutrientKeys = ["n", "p", "k"];
 
   // Fixed reference row shown pre-filled at the top of the practice table
   const exampleRowData = { bag: 20, n: 10, p: 6, k: 3 };
@@ -31,12 +43,37 @@
 
   const round1 = (num) => Math.round(num * 10) / 10;
 
+  function shuffleArray(arr) {
+    const copy = arr.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function pickPracticeRows() {
+    return shuffleArray(practicePool).slice(0, PRACTICE_ROW_COUNT);
+  }
+
+  function pickBagQuestions() {
+    return shuffleArray(bagChallengePool).slice(0, BAG_QUESTION_COUNT);
+  }
+
   function weightInPracticeUnit(kgWeight) {
     return practiceUnit === "kg" ? kgWeight : round1(kgWeight / KG_PER_LB);
   }
 
   function nutrientAmountInPracticeUnit(kgWeight, percent) {
     return round1((weightInPracticeUnit(kgWeight) * percent) / 100);
+  }
+
+  function weightPoolInUnit(weightLb) {
+    return practiceUnit === "lb" ? weightLb : round1(weightLb * KG_PER_LB);
+  }
+
+  function nutrientAmountPool(weightLb, percent) {
+    return round1((weightPoolInUnit(weightLb) * percent) / 100);
   }
 
   // ---- Build practice table -------------------------------------------
@@ -50,7 +87,7 @@
     const nCell = document.getElementById("exampleNCell");
     const pCell = document.getElementById("examplePCell");
     const kCell = document.getElementById("exampleKCell");
-    if (weightCell) weightCell.textContent = `${weightInPracticeUnit(exampleRowData.bag)} ${practiceUnit}`;
+    if (weightCell) weightCell.textContent = `${weightInPracticeUnit(exampleRowData.bag)}`;
     if (analysisCell) analysisCell.textContent = `${exampleRowData.n}\u2013${exampleRowData.p}\u2013${exampleRowData.k}`;
     if (nCell) nCell.textContent = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.n);
     if (pCell) pCell.textContent = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.p);
@@ -86,10 +123,10 @@
     if (colKHeader) colKHeader.textContent = `${practiceUnit} of soluble potash`;
 
     practiceRows.innerHTML = "";
-    practiceData.forEach((row, index) => {
+    practiceRowsState.forEach((row, index) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${weightInPracticeUnit(row.bag)} ${practiceUnit}</td>
+        <td>${weightPoolInUnit(row.weightLb)}</td>
         <td>${row.n}–${row.p}–${row.k}</td>
         <td><input class="answer-input" type="number" step="0.1" inputmode="decimal"
              aria-label="Amount of nitrogen in ${practiceUnit} for row ${index + 1}" data-row="${index}" data-field="n"></td>
@@ -100,7 +137,6 @@
       `;
       practiceRows.appendChild(tr);
     });
-    if (scoreTotal) scoreTotal.textContent = practiceData.length * 3;
   }
 
   function checkPractice() {
@@ -109,13 +145,13 @@
     let correctCount = 0;
     let answeredCount = 0;
 
-    practiceData.forEach((row, index) => {
+    practiceRowsState.forEach((row, index) => {
       ["n", "p", "k"].forEach((field) => {
         const input = practiceRows.querySelector(
           `input[data-row="${index}"][data-field="${field}"]`
         );
         if (!input) return;
-        const expected = nutrientAmountInPracticeUnit(row.bag, row[field]);
+        const expected = nutrientAmountPool(row.weightLb, row[field]);
         const raw = input.value.trim();
         input.classList.remove("correct", "incorrect");
 
@@ -135,7 +171,7 @@
 
     if (feedback) {
       feedback.classList.remove("good", "needs-work");
-      const total = practiceData.length * 3;
+      const total = practiceRowsState.length * 3;
       if (answeredCount === 0) {
         feedback.textContent = "Enter an answer in each box, then check again.";
         feedback.classList.add("needs-work");
@@ -150,6 +186,7 @@
   }
 
   function resetPractice() {
+    practiceRowsState = pickPracticeRows();
     buildPracticeTable();
     renderExampleRow();
     renderWorkedExample();
@@ -174,7 +211,7 @@
     if (lbLabel) lbLabel.classList.toggle("active", practiceUnit === "lb");
     const hintText = document.getElementById("practiceUnitHint");
     if (hintText) {
-      hintText.textContent = `Enter answers in ${practiceUnit === "kg" ? "kilograms" : "pounds"}. Decimals are allowed.`;
+      hintText.textContent = `Using the bag weight and guaranteed analysis, enter the amount of nitrogen, phosphorus, and potassium in ${practiceUnit === "kg" ? "kilograms" : "pounds"}. Decimals are allowed. The first row is completed as an example.`;
     }
     buildPracticeTable();
     renderExampleRow();
@@ -207,15 +244,21 @@
 
   const bagQuestions = document.getElementById("bagQuestions");
 
+  function analysisPlaceholder(nutrientKey, percent) {
+    const parts = { n: "?", p: "?", k: "?" };
+    parts[nutrientKey] = percent;
+    return `${parts.n}\u2013${parts.p}\u2013${parts.k}`;
+  }
+
   function buildBagQuestions() {
     bagQuestions.innerHTML = "";
-    bagData.forEach((q, index) => {
+    currentBagQuestions.forEach((q, index) => {
       const div = document.createElement("div");
       div.className = "question";
       div.innerHTML = `
         <label for="bagAnswer${index}">
-          A tree needs ${q.needKg} kg of actual nitrogen. Fertilizer comes in ${q.bagWeight} kg bags
-          labeled ${q.nPercent}\u2013?\u2013?. How many bags should be purchased?
+          A tree needs ${q.needKg} kg of ${nutrientNames[q.nutrient]}. Fertilizer comes in ${q.bagWeight} kg bags
+          labeled ${analysisPlaceholder(q.nutrient, q.percent)}. How many bags should be purchased?
         </label>
         <div class="input-row">
           <input class="bag-answer" id="bagAnswer${index}" type="number" step="1" inputmode="numeric"
@@ -232,10 +275,10 @@
     let correctCount = 0;
     let answeredCount = 0;
 
-    bagData.forEach((q, index) => {
+    currentBagQuestions.forEach((q, index) => {
       const input = document.getElementById(`bagAnswer${index}`);
       if (!input) return;
-      const kgPerBag = (q.bagWeight * q.nPercent) / 100;
+      const kgPerBag = (q.bagWeight * q.percent) / 100;
       const expected = Math.ceil(q.needKg / kgPerBag);
       const raw = input.value.trim();
       input.classList.remove("correct", "incorrect");
@@ -256,17 +299,18 @@
       if (answeredCount === 0) {
         bagFeedback.textContent = "Enter your answer for each scenario, then check again.";
         bagFeedback.classList.add("needs-work");
-      } else if (correctCount === bagData.length) {
+      } else if (correctCount === currentBagQuestions.length) {
         bagFeedback.textContent = "All correct! Remember to round up to a whole bag.";
         bagFeedback.classList.add("good");
       } else {
-        bagFeedback.textContent = `${correctCount} of ${bagData.length} correct. Check whether you rounded up to the next whole bag.`;
+        bagFeedback.textContent = `${correctCount} of ${currentBagQuestions.length} correct. Check whether you rounded up to the next whole bag.`;
         bagFeedback.classList.add("needs-work");
       }
     }
   }
 
   function resetBags() {
+    currentBagQuestions = pickBagQuestions();
     buildBagQuestions();
     const bagFeedback = document.getElementById("bagFeedback");
     if (bagFeedback) {
@@ -280,9 +324,6 @@
   // Filenames encode guaranteed analysis as N-P-K; all bags are 50 lb net weight
   const bagFiles = ["20-17-8.png", "30-12-10.png", "25-8-6.png"];
   const BAG_WEIGHT_LB = 50;
-
-  const nutrientNames = { n: "nitrogen", p: "available phosphate", k: "soluble potash" };
-  const nutrientKeys = ["n", "p", "k"];
 
   let unit = "lb"; // "lb" or "kg"
   let quizState = null; // { file, values: {n,p,k}, q1Key, q2Key, q3Key }
@@ -416,8 +457,9 @@
   // ---- Wire up events ---------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", () => {
+    practiceRowsState = pickPracticeRows();
     setPracticeUnit(practiceUnit);
-    buildBagQuestions();
+    resetBags();
     newLabelQuiz();
     setUnit(unit);
 
