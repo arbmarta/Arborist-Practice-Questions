@@ -95,21 +95,21 @@
   }
 
   function renderWorkedExample() {
-    const w = weightInPracticeUnit(exampleRowData.bag);
-    const nAmount = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.n);
-    const pAmount = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.p);
-    const kAmount = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.k);
+    const w = round1(exampleRowData.bag / KG_PER_LB);
+    const nAmount = round1((w * exampleRowData.n) / 100);
+    const pAmount = round1((w * exampleRowData.p) / 100);
+    const kAmount = round1((w * exampleRowData.k) / 100);
 
     const intro = document.getElementById("workedExampleIntro");
     if (intro) {
-      intro.textContent = `A ${w} ${practiceUnit} bag of ${exampleRowData.n}\u2013${exampleRowData.p}\u2013${exampleRowData.k} fertilizer contains:`;
+      intro.textContent = `A ${w} lb bag of ${exampleRowData.n}\u2013${exampleRowData.p}\u2013${exampleRowData.k} fertilizer contains:`;
     }
     const nLine = document.getElementById("workedExampleN");
-    if (nLine) nLine.innerHTML = `Nitrogen: ${w} \u00d7 ${exampleRowData.n} \u00f7 100 = <strong>${nAmount} ${practiceUnit}</strong>`;
+    if (nLine) nLine.innerHTML = `Nitrogen: ${w} \u00d7 ${exampleRowData.n} \u00f7 100 = <strong>${nAmount} lb</strong>`;
     const pLine = document.getElementById("workedExampleP");
-    if (pLine) pLine.innerHTML = `Available phosphate: ${w} \u00d7 ${exampleRowData.p} \u00f7 100 = <strong>${pAmount} ${practiceUnit}</strong>`;
+    if (pLine) pLine.innerHTML = `Available phosphate: ${w} \u00d7 ${exampleRowData.p} \u00f7 100 = <strong>${pAmount} lb</strong>`;
     const kLine = document.getElementById("workedExampleK");
-    if (kLine) kLine.innerHTML = `Soluble potash: ${w} \u00d7 ${exampleRowData.k} \u00f7 100 = <strong>${kAmount} ${practiceUnit}</strong>`;
+    if (kLine) kLine.innerHTML = `Soluble potash: ${w} \u00d7 ${exampleRowData.k} \u00f7 100 = <strong>${kAmount} lb</strong>`;
   }
 
   function buildPracticeTable() {
