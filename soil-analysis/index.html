@@ -14,7 +14,6 @@
     <a href="./" aria-current="page">Soil Analysis</a>
     <a href="../tree-fertilization/">Tree Fertilization</a>
   </nav>
-
   <div class="page-content">
     <main class="page-shell">
       <header class="hero">
@@ -23,52 +22,24 @@
         <p class="intro">Practice using the soil texture triangle and the pH scale.</p>
       </header>
 
-      <section class="card">
-        <h2>Learning Objectives</h2>
-        <ul>
-          <li>Identify the major components of a soil-analysis report.</li>
-          <li>Interpret soil pH results.</li>
-          <li>Recognize the importance of soil texture and organic matter.</li>
-          <li>Evaluate reported nutrient levels.</li>
-          <li>Use soil-test information to support tree-care decisions.</li>
-        </ul>
-      </section>
-
-      <section class="card">
-        <h2>Major Soil Characteristics</h2>
-        <div class="topic-grid">
-          <article class="topic-card"><h3>Soil pH</h3><p>Describes how acidic or alkaline the soil is and affects nutrient availability and biological activity.</p></article>
-          <article class="topic-card"><h3>Soil Texture</h3><p>Describes the relative amounts of sand, silt, and clay in a soil sample.</p></article>
-          <article class="topic-card"><h3>Organic Matter</h3><p>Can improve soil structure, water retention, nutrient-holding capacity, and biological activity.</p></article>
-          <article class="topic-card"><h3>Nutrient Levels</h3><p>Reports may include phosphorus, potassium, calcium, magnesium, and other essential elements.</p></article>
-          <article class="topic-card"><h3>Soluble Salts</h3><p>High levels can interfere with water uptake and may damage tree roots.</p></article>
-          <article class="topic-card"><h3>Cation Exchange Capacity</h3><p>CEC indicates a soil's ability to hold positively charged nutrient ions.</p></article>
+      <section class="card" aria-labelledby="triangle-heading">
+        <h2 id="triangle-heading">Using the Soil Texture Triangle</h2>
+        <p>The soil texture triangle plots the percentages of sand, silt, and clay in a soil sample to determine its texture class. Given any two of the three percentages, the third can be found by subtracting from 100%, and the texture class can be read from where those values intersect on the triangle.</p>
+        <figure class="triangle-figure">
+          <img src="usda_texture_triangle.jpg" alt="USDA soil texture triangle diagram showing the percentages of sand, silt, and clay that define each soil texture class">
+          <figcaption>Source: USDA Forest Service</figcaption>
+        </figure>
+        <div id="textureQuestions" class="question-list"></div>
+        <div class="actions">
+          <button id="checkTextureButton" class="primary" type="button">Check answers</button>
+          <button id="resetTextureButton" class="secondary" type="button">New questions</button>
         </div>
-      </section>
-
-      <section class="card">
-        <h2>Example Soil-Test Results</h2>
-        <div class="table-wrap">
-          <table class="soil-table">
-            <thead><tr><th>Soil characteristic</th><th>Result</th><th>Interpretation</th></tr></thead>
-            <tbody>
-              <tr><td>pH</td><td>7.8</td><td>Moderately alkaline</td></tr>
-              <tr><td>Organic matter</td><td>2.1%</td><td>Relatively low</td></tr>
-              <tr><td>Phosphorus</td><td>18 ppm</td><td>Interpret using the laboratory's reference range</td></tr>
-              <tr><td>Potassium</td><td>145 ppm</td><td>Interpret using the laboratory's reference range</td></tr>
-              <tr><td>Soluble salts</td><td>0.7 dS/m</td><td>Review in relation to species and site conditions</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Important Reminder</h2>
-        <p>Soil-test numbers should not be interpreted in isolation. Consider the tree species, observed symptoms, site history, soil conditions, root environment, and the testing laboratory's reference ranges.</p>
+        <div id="textureFeedback" class="feedback" aria-live="polite"></div>
       </section>
 
       <footer><p>ISA Prep Course — Soil Analysis</p></footer>
     </main>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
