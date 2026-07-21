@@ -7,14 +7,14 @@
   // ---- Data -----------------------------------------------------------
 
   // Pool of possible practice rows; 3 are drawn at random each time the page
-  // loads or "Reset" is clicked. Weights are whole numbers in lb (the bag's
-  // native printed weight); kg is the derived, possibly-decimal value.
+  // loads or "Reset" is clicked. Weights are whole numbers in kg (multiples of
+  // 2 or 5, between 10 and 25); lb is the derived, possibly-decimal value.
   const practicePool = [
-    { weightLb: 5, n: 10, p: 5, k: 5 },
-    { weightLb: 10, n: 16, p: 4, k: 8 },
-    { weightLb: 15, n: 12, p: 12, k: 12 },
-    { weightLb: 20, n: 20, p: 0, k: 10 },
-    { weightLb: 22, n: 8, p: 2, k: 6 },
+    { weightKg: 10, n: 10, p: 5, k: 5 },
+    { weightKg: 12, n: 16, p: 4, k: 8 },
+    { weightKg: 16, n: 12, p: 12, k: 12 },
+    { weightKg: 20, n: 20, p: 0, k: 10 },
+    { weightKg: 25, n: 8, p: 2, k: 6 },
   ];
   const PRACTICE_ROW_COUNT = 3;
   let practiceRowsState = [];
@@ -39,7 +39,7 @@
   const exampleRowData = { bag: 20, n: 10, p: 6, k: 3 };
 
   const KG_PER_LB = 0.45359237;
-  let practiceUnit = "kg"; // "kg" or "lb"
+  let practiceUnit = "lb"; // "kg" or "lb"
 
   const round1 = (num) => Math.round(num * 10) / 10;
 
@@ -68,12 +68,12 @@
     return round1((weightInPracticeUnit(kgWeight) * percent) / 100);
   }
 
-  function weightPoolInUnit(weightLb) {
-    return practiceUnit === "lb" ? weightLb : round1(weightLb * KG_PER_LB);
+  function weightPoolInUnit(weightKg) {
+    return practiceUnit === "kg" ? weightKg : round1(weightKg / KG_PER_LB);
   }
 
-  function nutrientAmountPool(weightLb, percent) {
-    return round1((weightPoolInUnit(weightLb) * percent) / 100);
+  function nutrientAmountPool(weightKg, percent) {
+    return round1((weightPoolInUnit(weightKg) * percent) / 100);
   }
 
   // ---- Build practice table -------------------------------------------
@@ -126,7 +126,7 @@
     practiceRowsState.forEach((row, index) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${weightPoolInUnit(row.weightLb)}</td>
+        <td>${weightPoolInUnit(row.weightKg)}</td>
         <td>${row.n}–${row.p}–${row.k}</td>
         <td><input class="answer-input" type="number" step="0.1" inputmode="decimal"
              aria-label="Amount of nitrogen in ${practiceUnit} for row ${index + 1}" data-row="${index}" data-field="n"></td>
@@ -151,7 +151,7 @@
           `input[data-row="${index}"][data-field="${field}"]`
         );
         if (!input) return;
-        const expected = nutrientAmountPool(row.weightLb, row[field]);
+        const expected = nutrientAmountPool(row.weightKg, row[field]);
         const raw = input.value.trim();
         input.classList.remove("correct", "incorrect");
 
