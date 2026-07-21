@@ -119,9 +119,100 @@
     }
   }
 
+  // ---- pH scale questions ------------------------------------------------
+
+  const phQuestions = document.getElementById("phQuestions");
+  const PH_MIN = 0;
+  const PH_MAX = 14;
+  const PH_NEUTRAL = 7;
+
+  let currentPhValues = [];
+
+  function classifyPh(value) {
+    if (value === PH_NEUTRAL) return "neutral";
+    return value < PH_NEUTRAL ? "acidic" : "alkaline";
+  }
+
+  function pickPhValues() {
+    const others = [];
+    while (others.length < 2) {
+      const candidate = Math.floor(Math.random() * (PH_MAX - PH_MIN + 1)) + PH_MIN;
+      if (candidate !== PH_NEUTRAL && !others.includes(candidate)) others.push(candidate);
+    }
+    return shuffleArray([PH_NEUTRAL, ...others]);
+  }
+
+  function buildPhQuestions() {
+    phQuestions.innerHTML = "";
+    currentPhValues.forEach((value, index) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `
+        <label for="phAnswer${index}">Is a pH of ${value} acidic, neutral, or alkaline?</label>
+        <select id="phAnswer${index}" class="answer-input" data-index="${index}">
+          <option value="">Select an answer</option>
+          <option value="acidic">Acidic</option>
+          <option value="neutral">Neutral</option>
+          <option value="alkaline">Alkaline</option>
+        </select>
+      `;
+      phQuestions.appendChild(div);
+    });
+  }
+
+  function checkPh() {
+    const feedback = document.getElementById("phFeedback");
+    let correctCount = 0;
+    let answeredCount = 0;
+
+    currentPhValues.forEach((value, index) => {
+      const select = document.getElementById(`phAnswer${index}`);
+      if (!select) return;
+      select.classList.remove("correct", "incorrect");
+      if (select.value === "") return;
+      answeredCount += 1;
+      if (select.value === classifyPh(value)) {
+        select.classList.add("correct");
+        correctCount += 1;
+      } else {
+        select.classList.add("incorrect");
+      }
+    });
+
+    if (feedback) {
+      feedback.classList.remove("good", "needs-work");
+      if (answeredCount === 0) {
+        feedback.textContent = "Select an answer for each question, then check again.";
+        feedback.classList.add("needs-work");
+      } else if (correctCount === currentPhValues.length) {
+        feedback.textContent = "All correct! Nicely done.";
+        feedback.classList.add("good");
+      } else {
+        feedback.textContent = `${correctCount} of ${currentPhValues.length} correct. Review the highlighted questions and try again.`;
+        feedback.classList.add("needs-work");
+      }
+    }
+  }
+
+  function resetPh() {
+    currentPhValues = pickPhValues();
+    buildPhQuestions();
+    const feedback = document.getElementById("phFeedback");
+    if (feedback) {
+      feedback.textContent = "";
+      feedback.classList.remove("good", "needs-work");
+    }
+  }
+
+  // ---- Wire up events ---------------------------------------------------
+
   document.addEventListener("DOMContentLoaded", () => {
     resetTexture();
     document.getElementById("checkTextureButton").addEventListener("click", checkTexture);
     document.getElementById("resetTextureButton").addEventListener("click", resetTexture);
+
+    resetPh();
+    document.getElementById("checkPhButton").addEventListener("click", checkPh);
+    document.getElementById("resetPhButton").addEventListener("click", resetPh);
   });
 })();
