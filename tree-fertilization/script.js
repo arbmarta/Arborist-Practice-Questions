@@ -50,7 +50,7 @@
     const nCell = document.getElementById("exampleNCell");
     const pCell = document.getElementById("examplePCell");
     const kCell = document.getElementById("exampleKCell");
-    if (weightCell) weightCell.textContent = `Example: ${weightInPracticeUnit(exampleRowData.bag)} ${practiceUnit}`;
+    if (weightCell) weightCell.textContent = `${weightInPracticeUnit(exampleRowData.bag)} ${practiceUnit}`;
     if (analysisCell) analysisCell.textContent = `${exampleRowData.n}\u2013${exampleRowData.p}\u2013${exampleRowData.k}`;
     if (nCell) nCell.textContent = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.n);
     if (pCell) pCell.textContent = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.p);
@@ -167,7 +167,7 @@
   function setPracticeUnit(nextUnit) {
     practiceUnit = nextUnit;
     const toggle = document.getElementById("practiceUnitToggle");
-    if (toggle) toggle.setAttribute("aria-checked", practiceUnit === "lb" ? "true" : "false");
+    if (toggle) toggle.setAttribute("aria-checked", practiceUnit === "kg" ? "true" : "false");
     const kgLabel = document.getElementById("practiceUnitLabelKg");
     const lbLabel = document.getElementById("practiceUnitLabelLb");
     if (kgLabel) kgLabel.classList.toggle("active", practiceUnit === "kg");
