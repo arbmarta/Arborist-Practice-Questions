@@ -7,8 +7,9 @@
   // ---- Data -----------------------------------------------------------
 
   // Each row: bag weight (kg), guaranteed analysis N-P-K (as printed on the label)
+  // Note: the 20 kg 10-6-3 bag is intentionally left out here since it's shown
+  // pre-filled as the example row at the top of the table.
   const practiceData = [
-    { bag: 20, n: 10, p: 6, k: 3 },
     { bag: 25, n: 16, p: 4, k: 8 },
     { bag: 50, n: 20, p: 0, k: 10 },
     { bag: 20, n: 12, p: 12, k: 12 },
@@ -22,10 +23,20 @@
     { needKg: 12, bagWeight: 50, nPercent: 20 },
   ];
 
+  // Fixed reference row shown pre-filled at the top of the practice table
+  const exampleRowData = { bag: 20, n: 10, p: 6, k: 3 };
+
+  const KG_PER_LB = 0.45359237;
+  let practiceUnit = "kg"; // "kg" or "lb"
+
   const round1 = (num) => Math.round(num * 10) / 10;
 
-  function nutrientKg(bagWeight, percent) {
-    return round1((bagWeight * percent) / 100);
+  function weightInPracticeUnit(kgWeight) {
+    return practiceUnit === "kg" ? kgWeight : round1(kgWeight / KG_PER_LB);
+  }
+
+  function nutrientAmountInPracticeUnit(kgWeight, percent) {
+    return round1((weightInPracticeUnit(kgWeight) * percent) / 100);
   }
 
   // ---- Build practice table -------------------------------------------
@@ -33,19 +44,59 @@
   const practiceRows = document.getElementById("practiceRows");
   const scoreTotal = document.getElementById("scoreTotal");
 
+  function renderExampleRow() {
+    const weightCell = document.getElementById("exampleWeightCell");
+    const analysisCell = document.getElementById("exampleAnalysisCell");
+    const nCell = document.getElementById("exampleNCell");
+    const pCell = document.getElementById("examplePCell");
+    const kCell = document.getElementById("exampleKCell");
+    if (weightCell) weightCell.textContent = `Example: ${weightInPracticeUnit(exampleRowData.bag)} ${practiceUnit}`;
+    if (analysisCell) analysisCell.textContent = `${exampleRowData.n}\u2013${exampleRowData.p}\u2013${exampleRowData.k}`;
+    if (nCell) nCell.textContent = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.n);
+    if (pCell) pCell.textContent = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.p);
+    if (kCell) kCell.textContent = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.k);
+  }
+
+  function renderWorkedExample() {
+    const w = weightInPracticeUnit(exampleRowData.bag);
+    const nAmount = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.n);
+    const pAmount = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.p);
+    const kAmount = nutrientAmountInPracticeUnit(exampleRowData.bag, exampleRowData.k);
+
+    const intro = document.getElementById("workedExampleIntro");
+    if (intro) {
+      intro.textContent = `A ${w} ${practiceUnit} bag of ${exampleRowData.n}\u2013${exampleRowData.p}\u2013${exampleRowData.k} fertilizer contains:`;
+    }
+    const nLine = document.getElementById("workedExampleN");
+    if (nLine) nLine.innerHTML = `Nitrogen: ${w} \u00d7 ${exampleRowData.n} \u00f7 100 = <strong>${nAmount} ${practiceUnit}</strong>`;
+    const pLine = document.getElementById("workedExampleP");
+    if (pLine) pLine.innerHTML = `Available phosphate: ${w} \u00d7 ${exampleRowData.p} \u00f7 100 = <strong>${pAmount} ${practiceUnit}</strong>`;
+    const kLine = document.getElementById("workedExampleK");
+    if (kLine) kLine.innerHTML = `Soluble potash: ${w} \u00d7 ${exampleRowData.k} \u00f7 100 = <strong>${kAmount} ${practiceUnit}</strong>`;
+  }
+
   function buildPracticeTable() {
+    const colWeightHeader = document.getElementById("colWeightHeader");
+    const colNHeader = document.getElementById("colNHeader");
+    const colPHeader = document.getElementById("colPHeader");
+    const colKHeader = document.getElementById("colKHeader");
+    if (colWeightHeader) colWeightHeader.textContent = `Bag weight (${practiceUnit})`;
+    if (colNHeader) colNHeader.textContent = `${practiceUnit} of N`;
+    if (colPHeader) colPHeader.textContent = `${practiceUnit} of available phosphate`;
+    if (colKHeader) colKHeader.textContent = `${practiceUnit} of soluble potash`;
+
     practiceRows.innerHTML = "";
     practiceData.forEach((row, index) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${row.bag} kg</td>
+        <td>${weightInPracticeUnit(row.bag)} ${practiceUnit}</td>
         <td>${row.n}–${row.p}–${row.k}</td>
         <td><input class="answer-input" type="number" step="0.1" inputmode="decimal"
-             aria-label="Kilograms of nitrogen for row ${index + 1}" data-row="${index}" data-field="n"></td>
+             aria-label="Amount of nitrogen in ${practiceUnit} for row ${index + 1}" data-row="${index}" data-field="n"></td>
         <td><input class="answer-input" type="number" step="0.1" inputmode="decimal"
-             aria-label="Kilograms of available phosphate for row ${index + 1}" data-row="${index}" data-field="p"></td>
+             aria-label="Amount of available phosphate in ${practiceUnit} for row ${index + 1}" data-row="${index}" data-field="p"></td>
         <td><input class="answer-input" type="number" step="0.1" inputmode="decimal"
-             aria-label="Kilograms of soluble potash for row ${index + 1}" data-row="${index}" data-field="k"></td>
+             aria-label="Amount of soluble potash in ${practiceUnit} for row ${index + 1}" data-row="${index}" data-field="k"></td>
       `;
       practiceRows.appendChild(tr);
     });
@@ -64,7 +115,7 @@
           `input[data-row="${index}"][data-field="${field}"]`
         );
         if (!input) return;
-        const expected = nutrientKg(row.bag, row[field]);
+        const expected = nutrientAmountInPracticeUnit(row.bag, row[field]);
         const raw = input.value.trim();
         input.classList.remove("correct", "incorrect");
 
@@ -100,6 +151,8 @@
 
   function resetPractice() {
     buildPracticeTable();
+    renderExampleRow();
+    renderWorkedExample();
     const scoreValue = document.getElementById("scoreValue");
     const feedback = document.getElementById("feedback");
     const hint = document.getElementById("hint");
@@ -111,13 +164,41 @@
     if (hint) hint.hidden = true;
   }
 
+  function setPracticeUnit(nextUnit) {
+    practiceUnit = nextUnit;
+    const toggle = document.getElementById("practiceUnitToggle");
+    if (toggle) toggle.setAttribute("aria-checked", practiceUnit === "lb" ? "true" : "false");
+    const kgLabel = document.getElementById("practiceUnitLabelKg");
+    const lbLabel = document.getElementById("practiceUnitLabelLb");
+    if (kgLabel) kgLabel.classList.toggle("active", practiceUnit === "kg");
+    if (lbLabel) lbLabel.classList.toggle("active", practiceUnit === "lb");
+    const hintText = document.getElementById("practiceUnitHint");
+    if (hintText) {
+      hintText.textContent = `Enter answers in ${practiceUnit === "kg" ? "kilograms" : "pounds"}. Decimals are allowed.`;
+    }
+    buildPracticeTable();
+    renderExampleRow();
+    renderWorkedExample();
+    const scoreValue = document.getElementById("scoreValue");
+    const feedback = document.getElementById("feedback");
+    if (scoreValue) scoreValue.textContent = "0";
+    if (feedback) {
+      feedback.textContent = "";
+      feedback.classList.remove("good", "needs-work");
+    }
+  }
+
+  function togglePracticeUnit() {
+    setPracticeUnit(practiceUnit === "kg" ? "lb" : "kg");
+  }
+
   function toggleHint() {
     const hint = document.getElementById("hint");
     if (!hint) return;
     hint.hidden = !hint.hidden;
     if (!hint.hidden) {
       hint.textContent =
-        "Nutrient mass (kg) = bag mass (kg) \u00d7 nutrient percentage \u00f7 100. " +
+        `Nutrient mass (${practiceUnit}) = bag mass (${practiceUnit}) \u00d7 nutrient percentage \u00f7 100. ` +
         "The three numbers on a fertilizer label are always listed as % nitrogen \u2013 % available phosphate \u2013 % soluble potash.";
     }
   }
@@ -199,7 +280,6 @@
   // Filenames encode guaranteed analysis as N-P-K; all bags are 50 lb net weight
   const bagFiles = ["20-17-8.png", "30-12-10.png", "25-8-6.png"];
   const BAG_WEIGHT_LB = 50;
-  const KG_PER_LB = 0.45359237;
 
   const nutrientNames = { n: "nitrogen", p: "available phosphate", k: "soluble potash" };
   const nutrientKeys = ["n", "p", "k"];
@@ -336,7 +416,7 @@
   // ---- Wire up events ---------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", () => {
-    buildPracticeTable();
+    setPracticeUnit(practiceUnit);
     buildBagQuestions();
     newLabelQuiz();
     setUnit(unit);
@@ -344,6 +424,7 @@
     document.getElementById("checkButton").addEventListener("click", checkPractice);
     document.getElementById("resetButton").addEventListener("click", resetPractice);
     document.getElementById("hintButton").addEventListener("click", toggleHint);
+    document.getElementById("practiceUnitToggle").addEventListener("click", togglePracticeUnit);
 
     document.getElementById("checkBagsButton").addEventListener("click", checkBags);
     document.getElementById("resetBagsButton").addEventListener("click", resetBags);
