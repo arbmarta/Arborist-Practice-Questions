@@ -1,6 +1,7 @@
-// Disorders and Diagnostics — Key Term Definitions and Diagnostic Steps
-// Three definition-matching quizzes (dropdown select, same pattern as the
-// other lessons) plus a drag-and-reorder activity for the diagnosis steps.
+// Disorders and Diagnostics — Key Term Matching and Diagnostic Steps
+// Two drag-and-match activities (word bank of term chips, dropped or tapped
+// onto their matching definition) plus a drag-and-reorder activity for the
+// diagnosis steps.
 
 (function () {
   "use strict";
@@ -34,9 +35,9 @@
   const diagnosticTerms = [
     { term: "Signs", definition: "Direct indications of the causal agent; can be diagnostic (ex: galleries, conks)." },
     { term: "Symptoms", definition: "Effects of the causal agent; often not diagnostic on their own (ex: wilting, necrosis)." },
-    { term: "Brown Roots", definition: "Indicate dry soil conditions or toxic chemicals." },
-    { term: "Black Roots", definition: "Indicate anaerobic conditions, disease, or pathogens." },
   ];
+
+  const combinedTerms = healthConcepts.concat(diagnosticTerms);
 
   const phcControl = [
     { term: "Prevention", definition: "The preferred method, focused on promoting plant health before problems start." },
@@ -47,76 +48,210 @@
     { term: "Augmentation", definition: "Rearing and releasing predators of pests." },
   ];
 
-  // ---- Generic definition-matching section --------------------------------
-  // pool: [{term, definition}]; questionCount: how many to show per round
-  // (use pool.length to show every term every round).
-  function initDefinitionSection(pool, questionCount, ids) {
+  // ---- Generic drag/tap term-matching section ------------------------------
+  // pool: [{term, definition}]; questionCount: how many to show per round.
+  function initMatchingSection(pool, questionCount, ids) {
+    const wrapperEl = document.getElementById(ids.wrapper);
+    const bankEl = document.getElementById(ids.bank);
     const listEl = document.getElementById(ids.list);
     const feedbackEl = document.getElementById(ids.feedback);
-    let currentQuestions = [];
 
-    const sortedTerms = pool.map((p) => p.term).slice().sort((a, b) => a.localeCompare(b));
+    let currentItems = [];
+    let selectedChip = null;
+    let draggedChip = null;
 
-    function optionsMarkup() {
-      return sortedTerms.map((t) => `<option value="${t}">${t}</option>`).join("");
-    }
-
-    function pickQuestions() {
+    function pickItems() {
       return shuffleArray(pool).slice(0, questionCount);
     }
 
-    function build() {
+    function updateSlotFocusability(slot) {
+      slot.tabIndex = slot.querySelector(".term-chip") ? -1 : 0;
+    }
+
+    function moveChip(chip, destination) {
+      const oldSlot = chip.parentElement && chip.parentElement.classList.contains("match-slot")
+        ? chip.parentElement
+        : null;
+      if (oldSlot) {
+        oldSlot.classList.remove("correct", "incorrect");
+      }
+
+      if (destination.classList.contains("match-slot")) {
+        const existing = destination.querySelector(".term-chip");
+        if (existing && existing !== chip) {
+          bankEl.appendChild(existing);
+          existing.classList.remove("selected");
+          existing.setAttribute("aria-pressed", "false");
+        }
+        destination.classList.remove("correct", "incorrect");
+      }
+
+      destination.appendChild(chip);
+      chip.classList.remove("selected", "dragging");
+      chip.setAttribute("aria-pressed", "false");
+      if (selectedChip === chip) selectedChip = null;
+
+      if (oldSlot) updateSlotFocusability(oldSlot);
+      if (destination.classList.contains("match-slot")) updateSlotFocusability(destination);
+    }
+
+    function render() {
+      bankEl.innerHTML = "";
+      shuffleArray(currentItems).forEach((item) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "term-chip";
+        chip.draggable = true;
+        chip.dataset.term = item.term;
+        chip.textContent = item.term;
+        chip.setAttribute("aria-pressed", "false");
+        bankEl.appendChild(chip);
+      });
+
       listEl.innerHTML = "";
-      currentQuestions.forEach((q, index) => {
-        const div = document.createElement("div");
-        div.className = "question";
-        div.innerHTML = `
-          <label for="${ids.prefix}Answer${index}">${q.definition}</label>
-          <select id="${ids.prefix}Answer${index}" class="answer-input" data-index="${index}">
-            <option value="">Select a term</option>
-            ${optionsMarkup()}
-          </select>
-        `;
-        listEl.appendChild(div);
+      currentItems.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "match-item";
+
+        const def = document.createElement("p");
+        def.className = "match-definition";
+        def.textContent = item.definition;
+
+        const slot = document.createElement("div");
+        slot.className = "match-slot";
+        slot.dataset.correctTerm = item.term;
+        slot.tabIndex = 0;
+        slot.setAttribute("role", "button");
+        slot.setAttribute("aria-label", `Answer slot for: ${item.definition}`);
+
+        row.appendChild(def);
+        row.appendChild(slot);
+        listEl.appendChild(row);
       });
     }
 
     function check() {
+      const slots = [...listEl.querySelectorAll(".match-slot")];
       let correctCount = 0;
-      let answeredCount = 0;
-      currentQuestions.forEach((q, index) => {
-        const select = document.getElementById(`${ids.prefix}Answer${index}`);
-        if (!select) return;
-        select.classList.remove("correct", "incorrect");
-        if (select.value === "") return;
-        answeredCount += 1;
-        if (select.value === q.term) {
-          select.classList.add("correct");
+      let filledCount = 0;
+
+      slots.forEach((slot) => {
+        slot.classList.remove("correct", "incorrect");
+        const chip = slot.querySelector(".term-chip");
+        if (!chip) return;
+        filledCount += 1;
+        if (chip.dataset.term === slot.dataset.correctTerm) {
+          slot.classList.add("correct");
           correctCount += 1;
         } else {
-          select.classList.add("incorrect");
+          slot.classList.add("incorrect");
         }
       });
 
       feedbackEl.classList.remove("good", "needs-work");
-      if (answeredCount === 0) {
-        feedbackEl.textContent = "Select an answer for each question, then check again.";
+      if (filledCount === 0) {
+        feedbackEl.textContent = "Place a term in each slot, then check again.";
         feedbackEl.classList.add("needs-work");
-      } else if (correctCount === currentQuestions.length) {
+      } else if (correctCount === slots.length) {
         feedbackEl.textContent = "All correct! Nicely done.";
         feedbackEl.classList.add("good");
       } else {
-        feedbackEl.textContent = `${correctCount} of ${currentQuestions.length} correct. Review the highlighted questions and try again.`;
+        feedbackEl.textContent = `${correctCount} of ${slots.length} correct. Review the highlighted definitions and try again.`;
         feedbackEl.classList.add("needs-work");
       }
     }
 
     function reset() {
-      currentQuestions = pickQuestions();
-      build();
+      currentItems = pickItems();
+      selectedChip = null;
+      draggedChip = null;
+      render();
       feedbackEl.textContent = "";
       feedbackEl.classList.remove("good", "needs-work");
     }
+
+    // ---- Tap-to-place (mouse click, touch tap, and keyboard Enter/Space via button semantics) ----
+    wrapperEl.addEventListener("click", (e) => {
+      const chip = e.target.closest(".term-chip");
+      if (chip) {
+        const inSlot = chip.parentElement && chip.parentElement.classList.contains("match-slot");
+        if (inSlot) {
+          moveChip(chip, bankEl);
+          return;
+        }
+        if (selectedChip === chip) {
+          chip.classList.remove("selected");
+          chip.setAttribute("aria-pressed", "false");
+          selectedChip = null;
+        } else {
+          if (selectedChip) {
+            selectedChip.classList.remove("selected");
+            selectedChip.setAttribute("aria-pressed", "false");
+          }
+          selectedChip = chip;
+          chip.classList.add("selected");
+          chip.setAttribute("aria-pressed", "true");
+        }
+        return;
+      }
+
+      const slot = e.target.closest(".match-slot");
+      if (slot && selectedChip) {
+        moveChip(selectedChip, slot);
+      }
+    });
+
+    // Slots are plain divs (a chip <button> can't legally nest inside another
+    // button), so Enter/Space needs to be wired up manually.
+    wrapperEl.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      const slot = e.target.closest(".match-slot");
+      if (!slot || e.target !== slot) return;
+      e.preventDefault();
+      if (selectedChip) moveChip(selectedChip, slot);
+    });
+
+    // ---- Native drag-and-drop (mouse / trackpad) ----
+    wrapperEl.addEventListener("dragstart", (e) => {
+      const chip = e.target.closest(".term-chip");
+      if (!chip) return;
+      draggedChip = chip;
+      chip.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", chip.dataset.term);
+    });
+
+    wrapperEl.addEventListener("dragend", (e) => {
+      const chip = e.target.closest(".term-chip");
+      if (chip) chip.classList.remove("dragging");
+      listEl.querySelectorAll(".match-slot.drag-over").forEach((s) => s.classList.remove("drag-over"));
+      draggedChip = null;
+    });
+
+    wrapperEl.addEventListener("dragover", (e) => {
+      const slot = e.target.closest(".match-slot");
+      const bank = e.target.closest(".term-bank");
+      if (slot || bank) e.preventDefault();
+      if (slot) slot.classList.add("drag-over");
+    });
+
+    wrapperEl.addEventListener("dragleave", (e) => {
+      const slot = e.target.closest(".match-slot");
+      if (slot) slot.classList.remove("drag-over");
+    });
+
+    wrapperEl.addEventListener("drop", (e) => {
+      const slot = e.target.closest(".match-slot");
+      const bank = e.target.closest(".term-bank");
+      if (slot && draggedChip) {
+        e.preventDefault();
+        slot.classList.remove("drag-over");
+        moveChip(draggedChip, slot);
+      } else if (bank && draggedChip) {
+        e.preventDefault();
+        moveChip(draggedChip, bankEl);
+      }
+    });
 
     document.getElementById(ids.checkButton).addEventListener("click", check);
     document.getElementById(ids.resetButton).addEventListener("click", reset);
@@ -288,25 +423,19 @@
   // ---- Wire everything up --------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", () => {
-    initDefinitionSection(healthConcepts, 6, {
-      prefix: "health",
-      list: "healthQuestions",
-      checkButton: "checkHealthButton",
-      resetButton: "resetHealthButton",
-      feedback: "healthFeedback",
+    initMatchingSection(combinedTerms, 8, {
+      wrapper: "termsMatch",
+      bank: "termsBank",
+      list: "termsList",
+      checkButton: "checkTermsButton",
+      resetButton: "resetTermsButton",
+      feedback: "termsFeedback",
     });
 
-    initDefinitionSection(diagnosticTerms, diagnosticTerms.length, {
-      prefix: "diagnostic",
-      list: "diagnosticQuestions",
-      checkButton: "checkDiagnosticButton",
-      resetButton: "resetDiagnosticButton",
-      feedback: "diagnosticFeedback",
-    });
-
-    initDefinitionSection(phcControl, phcControl.length, {
-      prefix: "phc",
-      list: "phcQuestions",
+    initMatchingSection(phcControl, phcControl.length, {
+      wrapper: "phcMatch",
+      bank: "phcBank",
+      list: "phcList",
       checkButton: "checkPhcButton",
       resetButton: "resetPhcButton",
       feedback: "phcFeedback",
