@@ -25,19 +25,11 @@
     { term: "Chronic", definition: "Occurs over long periods with a slow onset (ex: poor drainage, soil compaction)." },
     { term: "Vitality", definition: "A plant's ability to overcome stress and thrive." },
     { term: "Vigor", definition: "A plant's genetic capacity to resist stress." },
-    { term: "Physical Defense", definition: "Altered foliage, thorns, or spines that deter damage." },
-    { term: "Allelochemicals", definition: "Toxic or deterring compounds produced by a plant." },
     { term: "Key Stressors", definition: "Frequently encountered pests, disorders, and site conditions." },
     { term: "Key Plants", definition: "Species with a high incidence of pest problems." },
-    { term: "Key Plants (alt.)", definition: "A plant with significant value to the client." },
-  ];
-
-  const diagnosticTerms = [
     { term: "Signs", definition: "Direct indications of the causal agent; can be diagnostic (ex: galleries, conks)." },
     { term: "Symptoms", definition: "Effects of the causal agent; often not diagnostic on their own (ex: wilting, necrosis)." },
   ];
-
-  const combinedTerms = healthConcepts.concat(diagnosticTerms);
 
   const phcControl = [
     { term: "Prevention", definition: "The preferred method, focused on promoting plant health before problems start." },
@@ -423,7 +415,7 @@
   // ---- Wire everything up --------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", () => {
-    initMatchingSection(combinedTerms, 8, {
+    initMatchingSection(healthConcepts, 8, {
       wrapper: "termsMatch",
       bank: "termsBank",
       list: "termsList",
