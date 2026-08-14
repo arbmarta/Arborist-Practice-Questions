@@ -115,7 +115,7 @@
     },
     {
       term: "Vascular Discoloration",
-      image: "images/wood_discoloration.jpeg",
+      image: "images/vascular_discoloration.jpeg",
       category: "symptom",
       hint: "This is internal tissue damaged by the pathogen — the plant's own tissue reacting, not the pathogen itself.",
     },
