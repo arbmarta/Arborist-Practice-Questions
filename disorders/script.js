@@ -91,7 +91,7 @@
     },
     {
       term: "Gummosis",
-      image: "images/gumosis.jpeg",
+      image: "images/gummosis.jpeg",
       category: "symptom",
       hint: "The image shows the tree's own resin or sap response.",
     },
