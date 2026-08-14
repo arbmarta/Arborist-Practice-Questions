@@ -192,6 +192,68 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .question { padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: #fbfcfa; }
 .question label { display: block; font-weight: 700; margin-bottom: 10px; }
 .question .input-row { display: flex; align-items: center; gap: 10px; max-width: 260px; }
+.match-activity { margin-top: 20px; }
+.term-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: #f7faf6;
+  margin-bottom: 20px;
+  min-height: 56px;
+}
+.term-chip {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  background: #fff;
+  color: var(--accent-dark);
+  font-weight: 700;
+  cursor: grab;
+}
+.term-chip:active { cursor: grabbing; }
+.term-chip.selected { background: var(--accent); color: #fff; box-shadow: 0 0 0 3px rgba(47, 107, 69, .25); }
+.term-chip.dragging { opacity: .4; }
+.term-chip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.match-list { display: grid; gap: 14px; }
+.match-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fbfcfa;
+}
+.match-definition { margin: 0; flex: 1 1 260px; font-weight: 600; }
+.match-slot {
+  flex: 0 0 auto;
+  min-width: 180px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.match-slot:empty::before { content: "Tap or drop a term here"; font-weight: 500; font-size: .85rem; color: var(--muted); }
+.match-slot.drag-over { border-color: var(--accent); background: #f0f6f0; }
+.match-slot.correct { border-style: solid; border-color: var(--good); background: var(--good-bg); }
+.match-slot.incorrect { border-style: solid; border-color: var(--bad); background: var(--bad-bg); }
+.match-slot .term-chip { cursor: pointer; }
+.match-slot:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+@media (max-width: 650px) {
+  .match-item { flex-direction: column; align-items: stretch; }
+  .match-slot { min-width: 0; width: 100%; }
+}
+
 .steps-list { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 10px; }
 .step-item {
   display: flex;
