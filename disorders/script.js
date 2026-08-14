@@ -47,18 +47,78 @@
   // abnormal growth). A few of these are genuine judgment calls — check
   // them against your course material before relying on this quiz.
   const photoSigns = [
-    { term: "Canker", image: "images/canker.jpeg", category: "symptom" },
-    { term: "Chlorosis", image: "images/discoloration.jpeg", category: "symptom" },
-    { term: "Emergence Holes", image: "images/emergence_hole.jpeg", category: "sign" },
-    { term: "Conk", image: "images/fungus.jpeg", category: "sign" },
-    { term: "Conk", image: "images/fungus_2.jpeg", category: "sign" },
-    { term: "Gall", image: "images/gall_wasp.jpeg", category: "symptom" },
-    { term: "Galleries", image: "images/galleries.jpeg", category: "sign" },
-    { term: "Gummosis", image: "images/gumosis.jpeg", category: "symptom" },
-    { term: "Necrosis", image: "images/needle_death.jpeg", category: "symptom" },
-    { term: "Rust", image: "images/rust.jpeg", category: "sign" },
-    { term: "Oozing", image: "images/slime_flux.jpeg", category: "symptom" },
-    { term: "Vascular Discoloration", image: "images/wood_discoloration.jpeg", category: "symptom" },
+    {
+      term: "Canker",
+      image: "images/canker.jpeg",
+      category: "symptom",
+      hint: "This is dead, sunken plant tissue — the plant's own reaction to injury or infection, not the pathogen itself.",
+    },
+    {
+      term: "Chlorosis",
+      image: "images/discoloration.jpeg",
+      category: "symptom",
+      hint: "This is yellowing of leaf tissue — an effect on the plant, not physical evidence of the pest or pathogen.",
+    },
+    {
+      term: "Emergence Holes",
+      image: "images/emergence_hole.jpeg",
+      category: "sign",
+      hint: "This hole was physically created by an insect leaving the tree — direct evidence of the pest itself.",
+    },
+    {
+      term: "Conk",
+      image: "images/fungus.jpeg",
+      category: "sign",
+      hint: "A conk is the fungus's own fruiting body — it's part of the causal agent, not the plant's reaction.",
+    },
+    {
+      term: "Conk",
+      image: "images/fungus_2.jpeg",
+      category: "sign",
+      hint: "A conk is the fungus's own fruiting body — it's part of the causal agent, not the plant's reaction.",
+    },
+    {
+      term: "Gall",
+      image: "images/gall_wasp.jpeg",
+      category: "symptom",
+      hint: "A gall is abnormal plant tissue growing in response to the insect's presence — it's plant tissue, not the insect itself.",
+    },
+    {
+      term: "Galleries",
+      image: "images/galleries.jpeg",
+      category: "sign",
+      hint: "These tunnels were carved directly by an insect — physical evidence of the pest itself.",
+    },
+    {
+      term: "Gummosis",
+      image: "images/gumosis.jpeg",
+      category: "symptom",
+      hint: "The image shows the tree's own resin or sap response.",
+    },
+    {
+      term: "Necrosis",
+      image: "images/needle_death.jpeg",
+      category: "symptom",
+      hint: "This is dead plant tissue — an effect of the causal agent, not the agent itself.",
+    },
+    {
+      term: "Rust",
+      image: "images/rust.jpeg",
+      category: "sign",
+      hint: "These are the fungus's own spore-producing structures on the leaf surface — physical evidence of the pathogen.",
+    },
+    {
+      term: "Oozing",
+      image: "images/slime_flux.jpeg",
+      category: "symptom",
+      hint: "This is fluid the tree itself is releasing in response to internal pressure or injury.",
+    },
+    {
+      term: "Vascular Discoloration",
+      image: "images/wood_discoloration.jpeg",
+      category: "symptom",
+      hint: "This is internal tissue damaged by the pathogen — the plant's own tissue reacting, not the pathogen itself.",
+    },
   ];
 
   // ---- Generic drag/tap term-matching section ------------------------------
@@ -373,7 +433,7 @@
         button.disabled = true;
         feedbackEl.classList.remove("good");
         feedbackEl.classList.add("needs-work");
-        feedbackEl.textContent = "Not quite \u2014 try the other option.";
+        feedbackEl.textContent = `Not quite. Hint: ${current.hint}`;
       }
     }
 
