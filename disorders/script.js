@@ -40,6 +40,27 @@
     { term: "Augmentation", definition: "Rearing and releasing predators of pests." },
   ];
 
+  // Photo pool for the Sign/Symptom flashcard quiz. "category" is "sign"
+  // (direct physical evidence of the causal agent itself — a fungal
+  // fruiting body, an insect tunnel or exit hole) or "symptom" (the
+  // plant's own response to that agent — discoloration, dead tissue,
+  // abnormal growth). A few of these are genuine judgment calls — check
+  // them against your course material before relying on this quiz.
+  const photoSigns = [
+    { term: "Canker", image: "images/canker.jpeg", category: "symptom" },
+    { term: "Chlorosis", image: "images/discoloration.jpeg", category: "symptom" },
+    { term: "Emergence Holes", image: "images/emergence_hole.jpeg", category: "sign" },
+    { term: "Conk", image: "images/fungus.jpeg", category: "sign" },
+    { term: "Conk", image: "images/fungus_2.jpeg", category: "sign" },
+    { term: "Gall", image: "images/gall_wasp.jpeg", category: "symptom" },
+    { term: "Galleries", image: "images/galleries.jpeg", category: "sign" },
+    { term: "Gummosis", image: "images/gumosis.jpeg", category: "symptom" },
+    { term: "Necrosis", image: "images/needle_death.jpeg", category: "symptom" },
+    { term: "Rust", image: "images/rust.jpeg", category: "sign" },
+    { term: "Oozing", image: "images/slime_flux.jpeg", category: "symptom" },
+    { term: "Vascular Discoloration", image: "images/wood_discoloration.jpeg", category: "symptom" },
+  ];
+
   // ---- Generic drag/tap term-matching section ------------------------------
   // pool: [{term, definition}]; questionCount: how many to show per round.
   function initMatchingSection(pool, questionCount, ids) {
@@ -105,18 +126,38 @@
         const row = document.createElement("div");
         row.className = "match-item";
 
-        const def = document.createElement("p");
-        def.className = "match-definition";
-        def.textContent = item.definition;
+        if (item.image) {
+          row.classList.add("has-photo");
+          const img = document.createElement("img");
+          img.className = "match-photo";
+          img.src = item.image;
+          img.alt = "Photo of a tree sign or symptom to identify";
+          img.loading = "lazy";
+          img.addEventListener("error", () => {
+            console.warn(`Missing image for "${item.term}" — expected at ${item.image}`);
+            const fallback = document.createElement("div");
+            fallback.className = "photo-fallback";
+            fallback.textContent = "Photo coming soon";
+            img.replaceWith(fallback);
+          });
+          row.appendChild(img);
+        } else {
+          const def = document.createElement("p");
+          def.className = "match-definition";
+          def.textContent = item.definition;
+          row.appendChild(def);
+        }
 
         const slot = document.createElement("div");
         slot.className = "match-slot";
         slot.dataset.correctTerm = item.term;
         slot.tabIndex = 0;
         slot.setAttribute("role", "button");
-        slot.setAttribute("aria-label", `Answer slot for: ${item.definition}`);
+        slot.setAttribute(
+          "aria-label",
+          item.image ? "Answer slot for this photo" : `Answer slot for: ${item.definition}`
+        );
 
-        row.appendChild(def);
         row.appendChild(slot);
         listEl.appendChild(row);
       });
@@ -248,6 +289,107 @@
     document.getElementById(ids.checkButton).addEventListener("click", check);
     document.getElementById(ids.resetButton).addEventListener("click", reset);
     reset();
+  }
+
+  // ---- Sign/Symptom photo flashcard quiz -----------------------------------
+  // Shows one photo at a time. A correct Sign/Symptom guess advances to the
+  // next photo (after a brief pause so the feedback is visible); an
+  // incorrect guess disables that button and lets them try the other one.
+  function initPhotoQuiz(pool, ids) {
+    const imageEl = document.getElementById(ids.image);
+    const progressEl = document.getElementById(ids.progress);
+    const signButton = document.getElementById(ids.signButton);
+    const symptomButton = document.getElementById(ids.symptomButton);
+    const feedbackEl = document.getElementById(ids.feedback);
+    const restartButton = document.getElementById(ids.restartButton);
+
+    let queue = [];
+    let index = 0;
+    let correctCount = 0;
+    let advancing = false;
+
+    function resetButtonStates() {
+      [signButton, symptomButton].forEach((btn) => {
+        btn.classList.remove("correct", "incorrect");
+        btn.disabled = false;
+      });
+    }
+
+    function loadImage(item) {
+      imageEl.alt = "Photo of a tree sign or symptom to identify";
+      imageEl.onerror = () => {
+        console.warn(`Missing image for "${item.term}" — expected at ${item.image}`);
+        imageEl.alt = "Photo not found — check the file path in disorders/images/";
+      };
+      imageEl.src = item.image;
+    }
+
+    function updateProgress() {
+      progressEl.textContent = `Photo ${index + 1} of ${queue.length} \u00b7 Correct: ${correctCount}`;
+    }
+
+    function showCurrent() {
+      resetButtonStates();
+      loadImage(queue[index]);
+      updateProgress();
+      feedbackEl.textContent = "";
+      feedbackEl.classList.remove("good", "needs-work");
+    }
+
+    function showComplete() {
+      imageEl.removeAttribute("src");
+      imageEl.alt = "";
+      signButton.disabled = true;
+      symptomButton.disabled = true;
+      progressEl.textContent = `Complete \u2014 ${correctCount} of ${queue.length} correct.`;
+      feedbackEl.classList.remove("needs-work");
+      feedbackEl.classList.add("good");
+      feedbackEl.textContent = "Nice work! You went through every photo. Hit Restart to go again.";
+    }
+
+    function handleChoice(choice, button, otherButton) {
+      if (advancing) return;
+      const current = queue[index];
+      if (choice === current.category) {
+        button.classList.add("correct");
+        button.disabled = true;
+        otherButton.disabled = true;
+        correctCount += 1;
+        feedbackEl.classList.remove("needs-work");
+        feedbackEl.classList.add("good");
+        feedbackEl.textContent = `Correct \u2014 that's a ${current.category}.`;
+        advancing = true;
+        setTimeout(() => {
+          index += 1;
+          advancing = false;
+          if (index >= queue.length) {
+            showComplete();
+          } else {
+            showCurrent();
+          }
+        }, 900);
+      } else {
+        button.classList.add("incorrect");
+        button.disabled = true;
+        feedbackEl.classList.remove("good");
+        feedbackEl.classList.add("needs-work");
+        feedbackEl.textContent = "Not quite \u2014 try the other option.";
+      }
+    }
+
+    signButton.addEventListener("click", () => handleChoice("sign", signButton, symptomButton));
+    symptomButton.addEventListener("click", () => handleChoice("symptom", symptomButton, signButton));
+
+    function restart() {
+      queue = shuffleArray(pool);
+      index = 0;
+      correctCount = 0;
+      advancing = false;
+      showCurrent();
+    }
+
+    restartButton.addEventListener("click", restart);
+    restart();
   }
 
   // ---- Diagnostic steps: drag-and-drop reorder -----------------------------
@@ -431,6 +573,15 @@
       checkButton: "checkPhcButton",
       resetButton: "resetPhcButton",
       feedback: "phcFeedback",
+    });
+
+    initPhotoQuiz(photoSigns, {
+      image: "photoQuizImage",
+      progress: "photoQuizProgress",
+      signButton: "signButton",
+      symptomButton: "symptomButton",
+      feedback: "photoQuizFeedback",
+      restartButton: "restartPhotoQuizButton",
     });
 
     initStepsActivity();
