@@ -91,7 +91,7 @@
     },
     {
       term: "Gummosis",
-      image: "images/gummosis.jpeg",
+      image: "images/gumosis.jpeg",
       category: "symptom",
       hint: "The image shows the tree's own resin or sap response.",
     },
@@ -104,8 +104,8 @@
     {
       term: "Rust",
       image: "images/rust.jpeg",
-      category: "sign",
-      hint: "These are the fungus's own spore-producing structures on the leaf surface — physical evidence of the pathogen.",
+      category: "symptom",
+      hint: "This swollen, resin-soaked canker is the branch's later-stage reaction to a rust infection — an effect of the fungus, not the fungus itself.",
     },
     {
       term: "Oozing",
