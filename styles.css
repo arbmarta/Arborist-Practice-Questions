@@ -195,7 +195,7 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .photo-progress { color: var(--muted); font-weight: 700; margin: 4px 0 16px; }
 .quiz-photo {
   display: block;
-  max-width: 100%;
+  max-width: 50%;
   height: auto;
   margin: 0 auto;
   border-radius: 14px;
