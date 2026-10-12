@@ -1,0 +1,52 @@
+---
+layout: default
+description: "Interactive practice activities for the PNW-ISA Certified Arborist Prep Course, organized into five domains: botany, soils and nutrition, disorders and disturbances, arboriculture operations, and urban forestry."
+tagline: "Interactive study activities for the PNW-ISA Certified Arborist Prep Course"
+body_class: home
+---
+
+<main class="flush-bottom">
+
+	<p class="lede">
+		These activities let you practice the calculations, terms, and diagnostic steps
+		covered in the PNW-ISA Certified Arborist Prep Course. Each lesson generates new
+		questions, so you can work through it as many times as you like.
+	</p>
+
+	<div class="paper">
+		<span class="kicker">Before you start</span>
+		<p>
+			Where discrepancies between this website and the ISA textbook exist, always
+			defer to the ISA textbook. <a href="{{ '/about/' | relative_url }}">About this project</a>
+		</p>
+	</div>
+
+</main>
+
+{%- comment -%} One block per domain, built from _data/domains.yml {%- endcomment -%}
+{% for domain in site.data.domains %}
+<div class="section-heading domain-heading">
+	<h2>{{ domain.name }}</h2>
+	<p>{{ domain.core_idea }}</p>
+</div>
+
+<div class="cards">
+	{%- for lesson in domain.lessons %}
+	<a class="card" href="{{ lesson.url | relative_url }}">
+		<h4>{{ lesson.title }}</h4>
+		<p>{{ lesson.description }}</p>
+		<span class="arrow">&rarr;</span>
+	</a>
+	{%- else %}
+	<div class="card card-soon">
+		<h4>Lessons coming soon</h4>
+		<p>Practice activities for {{ domain.name | downcase | replace: "&", "and" }} are being written.</p>
+		<span class="card-tag">Under construction</span>
+	</div>
+	{%- endfor %}
+</div>
+{% endfor %}
+
+<main>
+	{% include share.html %}
+</main>
