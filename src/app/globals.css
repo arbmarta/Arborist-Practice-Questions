@@ -290,3 +290,32 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .review .rq{font-weight:750}
 .review li.no .rq{color:#7d2424}
 @media(max-width:600px){.domain-bar{grid-template-columns:1fr 50px}.domain-bar .bar{grid-column:1/-1;grid-row:2}}
+
+/* ==========================================================================
+   Wider layout and collapsible sidebar
+   ========================================================================== */
+:root{--max:1180px}
+.app{grid-template-columns:280px minmax(0,1fr)}
+main{padding:44px clamp(20px,3.5vw,48px) 80px}
+.lesson p,.lesson li{max-width:90ch}
+/* Lesson HTML carries its own <main> and intro block; stop them adding a second width limit and padding */
+.lesson main{max-width:none;margin:0;padding:0}
+.lesson .page-head{border-bottom:0;padding-bottom:0;margin-bottom:18px}
+.lesson .page-head .standfirst{font-size:1.08rem;color:var(--muted);max-width:90ch}
+
+aside{padding:22px 14px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto}
+aside section.nav-group{margin-bottom:4px}
+.nav-toggle{appearance:none;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;border:0;background:none;padding:9px 10px;border-radius:8px;font:inherit;font-size:.92rem;font-weight:750;color:var(--ink);cursor:pointer;text-align:left}
+.nav-toggle:hover{background:var(--soft)}
+.nav-toggle svg{width:12px;height:12px;flex:none;fill:none;stroke:var(--muted);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.nav-group.expanded .nav-toggle svg{transform:rotate(180deg)}
+.nav-group.current .nav-toggle{color:var(--accent)}
+.nav-links{padding:2px 0 8px 10px;margin-left:10px;border-left:2px solid var(--line)}
+aside .nav-links a{padding:5px 10px;font-size:.88rem;color:#3b463f}
+aside .nav-links a.active{background:var(--soft);color:var(--accent);font-weight:700}
+@media(max-width:850px){
+  aside{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;height:auto;z-index:19;background:#fbfcfa;border-right:0;padding:12px 18px 30px}
+  aside.open{display:block}
+  header nav.open{position:fixed;z-index:21;border-bottom:1px solid var(--line)}
+  aside.open{padding-top:64px}
+}

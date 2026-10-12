@@ -16,11 +16,13 @@ export default function PracticeExam({ bank, domains }: { bank: ExamQ[]; domains
   const [now, setNow] = useState(0);
   const [best, setBest] = useState<number | null>(null);
   const [onlyMissed, setOnlyMissed] = useState(false);
+  const [all, setAll] = useState(false); // 'Every question' mode: don't reveal the bank size
 
   useEffect(() => { try { const v = localStorage.getItem('exam:best'); if (v) setBest(+v); } catch {} }, []);
   useEffect(() => { if (!qs || done) return; const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, [qs, done]);
 
-  function begin(list: ExamQ[]) {
+  function begin(list: ExamQ[], all = false) {
+    setAll(all);
     setQs(shuffle(list).map(q => ({ ...q, order: shuffle(q.o.map((_, i) => i)) })));
     setAns({}); setIdx(0); setDone(false); setOnlyMissed(false); setStart(Date.now()); setNow(Date.now());
   }
@@ -34,12 +36,12 @@ export default function PracticeExam({ bank, domains }: { bank: ExamQ[]; domains
   if (!qs) return (
     <section className="act exam-start">
       <div className="act-head"><h2>Mixed practice exam</h2></div>
-      <p className="act-note">Questions are drawn at random from all five sections ({bank.length} in the bank) and shown one at a time, like the real exam. You get a score breakdown by domain at the end.</p>
+      <p className="act-note">Questions are drawn at random from all five sections and shown one at a time, like the real exam. You get a score breakdown by domain at the end.</p>
       {best !== null && <p className="act-score">Your best score: {best}%</p>}
       <div className="choice-row">
         {[20, 50, 100].filter(n => n < bank.length).map(n =>
           <button key={n} className="choice" onClick={() => begin(shuffle(bank).slice(0, n))}>{n} questions</button>)}
-        <button className="choice" onClick={() => begin(bank)}>All {bank.length}</button>
+        <button className="choice" onClick={() => begin(bank, true)}>Every question</button>
       </div>
     </section>
   );
@@ -58,10 +60,10 @@ export default function PracticeExam({ bank, domains }: { bank: ExamQ[]; domains
     return (
       <section className="act">
         <div className="act-head"><h2>Exam results</h2></div>
-        <div className="exam-score"><b>{pct}%</b><span>{right} of {qs.length} correct · {fmt(elapsed)}</span></div>
+        <div className="exam-score"><b>{pct}%</b><span>{all ? '' : `${right} of ${qs.length} correct · `}{fmt(elapsed)}</span></div>
         <div className="domain-bars">{byDomain.map(x => {
           const p = Math.round(x.r / x.n * 100);
-          return <div key={x.d} className="domain-bar"><span>{x.d}</span><div className="bar"><i style={{ width: p + '%' }} className={p >= 70 ? 'good' : p >= 50 ? 'mid' : 'low'} /></div><b>{x.r}/{x.n}</b></div>;
+          return <div key={x.d} className="domain-bar"><span>{x.d}</span><div className="bar"><i style={{ width: p + '%' }} className={p >= 70 ? 'good' : p >= 50 ? 'mid' : 'low'} /></div><b>{p}%</b></div>;
         })}</div>
         <p className="act-note small">Use the domain breakdown to decide which lessons to review next.</p>
         <div className="actions">
@@ -86,7 +88,7 @@ export default function PracticeExam({ bank, domains }: { bank: ExamQ[]; domains
   return (
     <section className="act exam">
       <div className="exam-bar">
-        <span>Question {idx + 1} of {qs.length}</span>
+        <span>Question {idx + 1}{all ? '' : ` of ${qs.length}`}</span>
         <span className="tag">{q.domain}</span>
         <span>{fmt(elapsed)}</span>
       </div>
