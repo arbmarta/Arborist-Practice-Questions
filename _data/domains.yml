@@ -11,12 +11,21 @@
   name: Soils & Nutrition
   core_idea: The below-ground growing environment
   lessons:
+    - title: Soil Science
+      url: /soil-science/
+      description: Learn how soils form and how their physical, chemical, and biological properties affect trees.
     - title: Soil Analysis
       url: /soil-analysis/
-      description: Apply the soil texture triangle and review soil pH.
+      description: Practice using the soil texture triangle and pH scale.
+    - title: Water Management
+      url: /water-management/
+      description: Understand drought, flooding, irrigation, conservation, mulch, and drainage.
+    - title: Tree Nutrition
+      url: /tree-nutrition/
+      description: Review essential elements, nutrient availability, deficiencies, and testing.
     - title: Tree Fertilization
       url: /tree-fertilization/
-      description: Use the guaranteed analyses from complete fertilizers to calculate application rates.
+      description: Learn fertilizer application concepts and practice calculations from guaranteed analyses.
 
 - id: disorders
   name: Disorders & Disturbances

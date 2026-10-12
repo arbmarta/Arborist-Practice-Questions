@@ -1188,3 +1188,58 @@ input.answer-input, .bag-answer { text-align: center; }
 	line-height: 20px;
 	color: var(--gray70);
 }
+
+/* ---------- learning pages ---------- */
+.lesson-kicker {
+	font-family: "Open Sans", sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--green-med);
+	margin: 0 0 8px;
+}
+.lesson-nav {
+	margin: 30px 0 10px;
+	padding: 18px 20px;
+	background: var(--sand);
+	border-left: 4px solid var(--green-med);
+}
+.lesson-nav strong { font-family: Archivo, "Helvetica Neue", Arial, sans-serif; }
+.lesson-nav ul { margin: 8px 0 0; padding-left: 22px; }
+.lesson-nav li { font-size: 16px; line-height: 25px; }
+.concept-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+	margin: 24px 0 34px;
+}
+.concept-card {
+	padding: 18px;
+	border: 1px solid var(--gray);
+	background: var(--white);
+}
+.concept-card h3 { margin: 0 0 6px; font-size: 18px; }
+.concept-card p { margin: 0; font-size: 16px; line-height: 25px; }
+.key-table { width: 100%; border-collapse: collapse; margin: 22px 0 32px; }
+.key-table th, .key-table td { padding: 10px 12px; border-bottom: 1px solid var(--gray); text-align: left; vertical-align: top; }
+.key-table th { font-family: "Open Sans", sans-serif; font-size: 14px; color: var(--green-dark); }
+.key-table td { font-family: "Source Serif 4", Georgia, serif; font-size: 16px; line-height: 24px; color: var(--gray80); }
+.knowledge-check {
+	margin: 28px 0;
+	border: 1px solid var(--gray);
+	border-left: 4px solid var(--green-light);
+	background: #fbfbf8;
+}
+.knowledge-check summary {
+	cursor: pointer;
+	padding: 16px 18px;
+	font-family: Archivo, "Helvetica Neue", Arial, sans-serif;
+	font-weight: 600;
+	color: var(--green-dark);
+}
+.knowledge-check > div { padding: 0 18px 16px; }
+.knowledge-check p, .knowledge-check li { font-size: 17px; line-height: 27px; }
+.source-note { margin-top: 54px; padding-top: 18px; border-top: 1px solid var(--gray); }
+.source-note p { font-size: 14px; line-height: 22px; color: var(--gray70); }
+@media (max-width: 620px) { .concept-grid { grid-template-columns: 1fr; } }
