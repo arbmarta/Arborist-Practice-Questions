@@ -6,5 +6,5 @@ export function generateStaticParams() { return COURSES.map(c => ({ course: c.sl
 export const metadata = { title: 'Grades' };
 export default async function Grades({ params }: { params: Promise<{ course: string }> }) {
   const c = findCourse((await params).course); if (!c) notFound();
-  return <main className="course-page"><p className="crumbs">{c.code}: {c.title}</p><h1>Grades</h1><Gradebook course={c.slug} quizKeys={Object.keys(quizzes)} /></main>;
+  return <main className="course-page"><p className="crumbs">{c.title}</p><h1>Grades</h1><Gradebook course={c.slug} quizKeys={Object.keys(quizzes)} /></main>;
 }

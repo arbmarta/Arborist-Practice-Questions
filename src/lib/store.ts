@@ -8,10 +8,12 @@ export type Student = {
   enrolled: string[];                                  // course slugs
   grades: Record<string, Record<string, QuizResult>>;  // course → module → result
   visited: Record<string, string[]>;                   // course → item hrefs viewed
+  surveys: Record<string, SurveyResponse>;             // course → exit survey
 };
+export type SurveyResponse = { answers: Record<string, string | number>; submitted?: string };
 const KEY = 'arborist-student-v1';
 const EVENT = 'arborist-student-change';
-const EMPTY: Student = { enrolled: [], grades: {}, visited: {} };
+const EMPTY: Student = { enrolled: [], grades: {}, visited: {}, surveys: {} };
 
 function read(): Student {
   try { const v = localStorage.getItem(KEY); return v ? { ...EMPTY, ...JSON.parse(v) } : EMPTY; } catch { return EMPTY; }
@@ -33,6 +35,13 @@ export const recordQuiz = (course: string, module: string, pct: number) => updat
   const r: QuizResult = { best: Math.max(prev?.best ?? 0, pct), last: pct, attempts: (prev?.attempts ?? 0) + 1, updated: new Date().toISOString() };
   return { ...s, grades: { ...s.grades, [course]: { ...s.grades[course], [module]: r } } };
 });
+export const saveSurvey = (course: string, r: SurveyResponse) => update(s => ({ ...s, surveys: { ...s.surveys, [course]: r } }));
+
+/** Share of a course's pages the student has opened, 0–100. */
+export function courseProgress(s: Student | null, course: string, total: number): number {
+  return total ? Math.round(Math.min(1, (s?.visited[course]?.length ?? 0) / total) * 100) : 0;
+}
+
 export const resetCourse = (course: string) => update(s => {
   const grades = { ...s.grades }; delete grades[course];
   const visited = { ...s.visited }; delete visited[course];

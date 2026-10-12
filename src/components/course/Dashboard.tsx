@@ -1,8 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { COURSES, type Course } from '@/lib/courses';
-import { courseGrade, enroll, unenroll, useStudent } from '@/lib/store';
+import { COURSES, flatItems, type Course } from '@/lib/courses';
+import { courseGrade, courseProgress, enroll, unenroll, useStudent } from '@/lib/store';
 import CourseArt from './CourseArt';
 import { Kebab } from './Icons';
 
@@ -36,13 +36,17 @@ export default function Dashboard() {
       {s && (enrolled.length ? <div className="course-cards">
         {enrolled.map(c => {
           const g = courseGrade(s, c.slug);
+          const prog = courseProgress(s, c.slug, flatItems(c).length);
           return <div className="course-card" key={c.slug}>
             <Link href={`/courses/${c.slug}/`} className="card-art" tabIndex={-1} aria-hidden="true"><CourseArt course={c} variant="banner" /></Link>
             <CardMenu course={c} />
             <div className="card-body">
-              <Link href={`/courses/${c.slug}/`} className="card-title" style={{ color: c.color }} title={`${c.code}: ${c.title}`}>{c.code}: {c.title}</Link>
-              <p className="card-code">{c.code}</p>
+              <Link href={`/courses/${c.slug}/`} className="card-title" style={{ color: c.color }} title={c.title}>{c.title}</Link>
               {g !== null && <p className="card-grade">Current grade: <b>{g}%</b></p>}
+              <div className="card-progress">
+                <div className="cp-bar" role="progressbar" aria-valuenow={prog} aria-valuemin={0} aria-valuemax={100} aria-label={`${c.title} progress`}><i style={{ width: prog + '%', background: c.color }} /></div>
+                <span>{prog === 100 ? 'Complete' : `${prog}% complete`}</span>
+              </div>
             </div>
           </div>;
         })}
@@ -57,7 +61,6 @@ export default function Dashboard() {
           <div className="catalog-row" key={c.slug}>
             <CourseArt course={c} variant="badge" />
             <div className="catalog-text">
-              <p className="card-code">{c.code}</p>
               <h3><Link href={`/courses/${c.slug}/`}>{c.title}</Link></h3>
               <p>{c.blurb}</p>
             </div>

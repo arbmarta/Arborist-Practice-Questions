@@ -6,7 +6,8 @@ const P = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLineca
 export function ItemIcon({ kind }: { kind: ItemKind }) {
   switch (kind) {
     case 'introduction':
-    case 'reading': // open book with text lines
+    case 'reading':
+    case 'survey': // open book with text lines
       return <svg viewBox="0 0 28 22" className="item-icon" aria-hidden="true" {...P}>
         <path d="M2 3h9a3 3 0 0 1 3 3v14a2.5 2.5 0 0 0-2.5-2.5H2z M26 3h-9a3 3 0 0 0-3 3v14a2.5 2.5 0 0 1 2.5-2.5H26z" />
         <path d="M5 7h5M5 10h5M5 13h5M18 7h5M18 10h5M18 13h5" />

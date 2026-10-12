@@ -2,8 +2,11 @@
 // Content (HTML and quiz questions) lives in content.ts and is referenced by key, so this file stays small
 // enough to ship to the browser for navigation, the dashboard and the gradebook.
 
-export type ItemKind = 'introduction' | 'video' | 'reading' | 'interactive' | 'quiz';
+export type ItemKind = 'introduction' | 'video' | 'reading' | 'interactive' | 'quiz' | 'survey';
 export const ITEM_KINDS: ItemKind[] = ['introduction', 'video', 'reading', 'interactive', 'quiz'];
+
+/** Every course ends with an exit survey, added after its modules. */
+export const SURVEY_MODULE: Module = { slug: 'course-survey', title: 'Course Exit Survey', items: ['survey'] };
 
 export type ActivityId = 'codit' | 'conifer-key' | 'soil-triangle' | 'pruning-cuts' | 'risk-matrix' | 'rope-terms';
 export const ACTIVITY_TITLES: Record<ActivityId, string> = {
@@ -46,7 +49,7 @@ export type Course = {
   modules: Module[];
 };
 
-export const COURSES: Course[] = [
+const COURSE_LIST: Course[] = [
   {
     slug: 'tree-biology', code: 'ARB101', title: 'Tree Biology and Identification', color: '#2f6b45', art: 'leaf',
     blurb: 'How trees are built, how they make and use energy, how they respond to injury, and how to identify them.',
@@ -140,6 +143,8 @@ export const COURSES: Course[] = [
   },
 ];
 
+export const COURSES: Course[] = COURSE_LIST.map(c => ({ ...c, modules: [...c.modules, SURVEY_MODULE] }));
+
 export const findCourse = (slug: string) => COURSES.find(c => c.slug === slug);
 export const moduleItems = (m: Module) => m.items ?? ITEM_KINDS;
 export const itemHref = (c: Course, m: Module, k: ItemKind) => `/courses/${c.slug}/${m.slug}/${k}/`;
@@ -153,6 +158,7 @@ export function itemTitle(c: Course, m: Module, k: ItemKind): string {
     case 'reading': return `Reading: ${m.title}`;
     case 'interactive': return m.interactive && m.interactive !== 'legacy' ? `Interactive: ${ACTIVITY_TITLES[m.interactive]}` : `Interactive: ${m.title}`;
     case 'quiz': return review ? `${c.title} Review Quiz` : `Module ${n} Quiz: ${m.title}`;
+    case 'survey': return 'Course Exit Survey';
   }
 }
 

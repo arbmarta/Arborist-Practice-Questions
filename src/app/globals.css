@@ -169,11 +169,8 @@ button:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:700px){.act-grid{grid-template-columns:1fr}}
 
 /* soil triangle */
-.tri-wrap{display:grid;grid-template-columns:1fr;gap:12px}
-.tri-wrap .tri-svg{max-width:660px;margin:0 auto}
-.tri-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 24px;align-items:start}
-.tri-panel .tri-readout,.tri-panel .act-feedback,.tri-panel>p{grid-column:1/-1}
-.tri-panel .actions{margin-top:0}
+.tri-wrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(250px,1fr);gap:20px 32px;align-items:center}
+.tri-panel{display:block}
 .tri-svg{width:100%;height:auto;touch-action:none;cursor:crosshair;user-select:none}
 .tri-svg polygon{stroke:none;transition:filter .15s}
 .tri-svg .tri-edge{fill:none;stroke:#5b4632;stroke-width:1.6;pointer-events:none}
@@ -192,7 +189,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .slider{display:block;margin:12px 0;font-weight:650}
 .slider b{float:right}
 .slider input{display:block;width:100%;margin-top:6px;accent-color:var(--accent)}
-@media(max-width:600px){.tri-panel{grid-template-columns:1fr}}
+@media(max-width:980px){.tri-wrap{grid-template-columns:1fr}.tri-wrap .tri-svg{max-width:640px;margin:0 auto}}
 
 /* pruning cuts */
 .cut{cursor:pointer}
@@ -446,3 +443,55 @@ header nav a{padding:20px 0}
 .gradebook td.num{text-align:center}
 .g-good{color:#1f6b3a}.g-mid{color:#9a6b00}.g-low{color:#a33333}
 .course-badge{display:block}
+
+/* dashboard progress */
+.course-card .card-body{flex:1;display:flex;flex-direction:column}
+.card-progress{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--muted);font-weight:650}
+.cp-bar{height:8px;border-radius:9px;background:#e7ebe5;overflow:hidden}
+.cp-bar i{display:block;height:100%;border-radius:9px;transition:width .3s}
+
+/* course exit survey */
+.survey-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:36px;align-items:start}
+.survey-intro p{font-size:1.1rem;line-height:1.7;margin:0 0 14px}
+.survey-panel{background:#f0f0f0;border-radius:4px;padding:26px 28px}
+.survey-lede{font-style:italic;font-size:.92rem;color:#333;margin:0 0 6px;padding-bottom:16px;border-bottom:1px solid #4a90b8}
+.survey-q{border:0;border-bottom:1px solid #4a90b8;margin:0;padding:18px 0}
+.survey-q legend{float:left;width:100%;font-size:.98rem;color:#222;margin-bottom:12px;padding:0}
+.survey-q legend span{font-style:italic}
+.req{color:#a33333;margin-left:3px}
+.nps{clear:both}
+.nps-ends{display:flex;justify-content:space-between;font-size:.9rem;color:#444;margin-bottom:8px}
+.nps-row{display:grid;grid-template-columns:repeat(11,1fr);text-align:center}
+.nps-row label{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-size:.9rem;padding:2px 0}
+.nps-row input{width:18px;height:18px;accent-color:var(--accent);margin:0}
+.survey-opts{clear:both;display:flex;flex-wrap:wrap;gap:8px}
+.survey-opts label{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid #d3d3d3;border-radius:6px;padding:7px 11px;cursor:pointer;font-size:.92rem}
+.survey-opts label.on{border-color:var(--accent);background:#eef5f0}
+.survey-opts input{accent-color:var(--accent);margin:0}
+.survey-note{clear:both;font-size:.9rem;color:#333;margin:0 0 10px}
+.survey-q textarea{width:100%;font:inherit;border:1px solid #c9c9c9;border-radius:3px;padding:10px;background:#fff;resize:vertical}
+.survey-progress{text-align:center;margin:26px 0 18px;font-size:.85rem;color:#333}
+.sp-label{display:block;margin-bottom:4px}
+.sp-row{display:flex;align-items:center;justify-content:center;gap:8px}
+.sp-bar{width:min(220px,50%);height:14px;background:#ddd;border-radius:3px;overflow:hidden}
+.sp-bar i{display:block;height:100%;background:#4a90b8;transition:width .25s}
+.survey-actions{display:flex;justify-content:flex-end;align-items:center;gap:14px}
+.survey-thanks{text-align:center;padding:30px 10px}
+.survey-thanks h2{margin:6px 0 8px}
+.survey-check{width:56px;height:56px;margin:0 auto;border-radius:50%;background:var(--accent);color:#fff;font-size:1.8rem;display:grid;place-items:center}
+.survey-error{color:#a33333}
+@media(max-width:980px){.survey-layout{grid-template-columns:1fr}}
+@media(max-width:520px){.survey-panel{padding:18px 14px}.nps-row label{font-size:.78rem}.nps-row input{width:15px;height:15px}}
+
+/* glossary keywords and pop-up */
+.gloss-term{appearance:none;border:0;background:none;padding:0;margin:0;font:inherit;font-weight:800;color:inherit;cursor:pointer;
+  text-decoration:underline dotted var(--accent);text-decoration-thickness:2px;text-underline-offset:3px;border-radius:3px}
+.gloss-term:hover,.gloss-term:focus-visible{color:var(--accent);background:var(--soft);outline:none}
+.gloss-pop{position:fixed;z-index:50;background:#fff;border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.16);padding:12px 16px 14px;animation:glossIn .12s ease-out}
+.gloss-pop.above{transform:translateY(-100%)}
+.gloss-pop p{margin:0;font-size:.95rem;line-height:1.55}
+.gloss-head{display:flex;justify-content:space-between;align-items:center}
+.gloss-label{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.gloss-close{appearance:none;border:0;background:none;font-size:1.4rem;line-height:1;cursor:pointer;color:var(--muted);padding:0 2px}
+.gloss-term-name{font-weight:800;font-size:1.08rem!important;margin:2px 0 4px!important}
+@keyframes glossIn{from{opacity:0}to{opacity:1}}

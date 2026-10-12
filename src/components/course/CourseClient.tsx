@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { findCourse, gradedModules, itemHref, itemTitle } from '@/lib/courses';
+import { findCourse, gradedModules, itemHref, itemTitle, moduleItems } from '@/lib/courses';
 import { courseGrade, enroll, markVisited, recordQuiz, resetCourse, unenroll, useStudent } from '@/lib/store';
 import Quiz from '@/components/Quiz';
 import SoilTriangle from '@/components/activities/SoilTriangle';
@@ -52,9 +52,9 @@ export function CourseCTA({ course }: { course: string }) {
   if (!s) return <div className="cta-row" />;
   if (!s.enrolled.includes(course)) return <div className="cta-row"><button className="primary" onClick={() => enroll(course)}>Enroll in this course</button></div>;
   const visited = new Set(s.visited[course] ?? []);
-  const first = c.modules.flatMap(m => (m.items ?? ['introduction', 'video', 'reading', 'interactive', 'quiz'] as const).map(k => ({ m, k })))
+  const first = c.modules.flatMap(m => moduleItems(m).map(k => ({ m, k })))
     .find(x => !visited.has(itemHref(c, x.m, x.k)));
-  const target = first ?? { m: c.modules[0], k: (c.modules[0].items?.[0] ?? 'introduction') as 'introduction' };
+  const target = first ?? { m: c.modules[0], k: moduleItems(c.modules[0])[0] };
   return <div className="cta-row">
     <Link className="primary linkbutton" href={itemHref(c, target.m, target.k)}>{visited.size ? 'Continue' : 'Start course'}</Link>
     {visited.size > 0 && <span className="cta-next">Next up: {itemTitle(c, target.m, target.k)}</span>}

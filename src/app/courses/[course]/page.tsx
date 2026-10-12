@@ -6,7 +6,7 @@ import { CourseCTA } from '@/components/course/CourseClient';
 
 export function generateStaticParams() { return COURSES.map(c => ({ course: c.slug })); }
 export async function generateMetadata({ params }: { params: Promise<{ course: string }> }) {
-  const c = findCourse((await params).course); return { title: c ? `${c.code}: ${c.title}` : 'Course' };
+  const c = findCourse((await params).course); return { title: c ? c.title : 'Course' };
 }
 
 // Course landing page, laid out like the eCornell course home: trailer + "This course includes", then description + "What you'll do".
@@ -18,7 +18,7 @@ export default async function CourseHome({ params }: { params: Promise<{ course:
   const lessonModules = c.modules.filter(m => !m.items || m.items.length > 1).length;
   return (
     <main className="course-home">
-      <h1>{c.code}: {c.title}</h1>
+      <h1>{c.title}</h1>
       <CourseCTA course={c.slug} />
       <div className="ch-grid">
         <div className="video-box" role="img" aria-label="Course trailer coming soon">

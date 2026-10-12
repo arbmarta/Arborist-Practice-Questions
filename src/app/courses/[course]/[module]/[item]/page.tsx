@@ -3,9 +3,11 @@ import { notFound } from 'next/navigation';
 import { COURSES, findCourse, flatItems, itemHref, itemTitle, moduleItems, type ItemKind } from '@/lib/courses';
 import { pages, quizzes } from '@/lib/content';
 import { withBase } from '@/lib/html';
+import { linkTerms } from '@/lib/glossary';
 import LegacyActivity from '@/components/LegacyActivity';
 import { Activity, EnrollGate, ModuleQuiz } from '@/components/course/CourseClient';
 import { ItemIcon } from '@/components/course/Icons';
+import ExitSurvey from '@/components/course/ExitSurvey';
 
 type Params = { course: string; module: string; item: string };
 
@@ -43,7 +45,7 @@ export default async function ItemPage({ params }: { params: Promise<Params> }) 
   switch (k) {
     case 'introduction':
       body = m.intro ? <div className="intro">
-        <p className="lead">{m.intro}</p>
+        <p className="lead" dangerouslySetInnerHTML={{ __html: linkTerms(m.intro) }} />
         {m.objectives && <><h2>Learning objectives</h2><p>By the end of this module you will be able to:</p><ul>{m.objectives.map(o => <li key={o}>{o}</li>)}</ul></>}
         <h2>In this module</h2>
         <ul className="module-outline">{moduleItems(m).filter(x => x !== 'introduction').map(x =>
@@ -56,12 +58,15 @@ export default async function ItemPage({ params }: { params: Promise<Params> }) 
         : <div className="video-box wide" role="img" aria-label="Video lecture coming soon"><span className="play" aria-hidden="true" /><span className="video-note">Video lecture coming soon</span></div>;
       break;
     case 'reading':
-      body = html ? <><article className="lesson" dangerouslySetInnerHTML={{ __html: withBase(html) }} /><LegacyActivity path={m.reading!} /></> : <Placeholder what="The reading" />;
+      body = html ? <><article className="lesson" dangerouslySetInnerHTML={{ __html: linkTerms(withBase(html)) }} /><LegacyActivity path={m.reading!} /></> : <Placeholder what="The reading" />;
       break;
     case 'interactive':
       body = m.interactive === 'legacy'
         ? <div className="placeholder"><p><b>This module&apos;s interactive worksheet is part of the reading.</b></p><p><Link href={itemHref(c, m, 'reading')}>Open the reading and worksheet →</Link></p></div>
         : m.interactive ? <Activity id={m.interactive} /> : <Placeholder what="The interactive activity" />;
+      break;
+    case 'survey':
+      body = <ExitSurvey course={c.slug} />;
       break;
     case 'quiz':
       body = questions ? <ModuleQuiz course={c.slug} module={m.slug} questions={questions} /> : <Placeholder what="The module quiz" />;
@@ -71,7 +76,7 @@ export default async function ItemPage({ params }: { params: Promise<Params> }) 
   return (
     <main className="course-page">
       <nav className="crumbs" aria-label="Breadcrumb">
-        <Link href={`/courses/${c.slug}/`}>{c.code}</Link><span>›</span>
+        <Link href={`/courses/${c.slug}/`}>{c.title}</Link><span>›</span>
         <span>{m.items?.length === 1 ? m.title : `Module ${n}: ${m.title}`}</span>
       </nav>
       <h1 className="item-title"><ItemIcon kind={k} />{itemTitle(c, m, k)}</h1>

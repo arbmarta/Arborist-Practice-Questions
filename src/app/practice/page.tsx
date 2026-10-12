@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { COURSES } from '@/lib/courses';
 import { quizzes } from '@/lib/content';
 import PracticeExam, { type ExamQ } from '@/components/activities/PracticeExam';
-export const metadata = { title: 'Practice exam' };
+export const metadata = { title: 'Practice Exam' };
 // Pool every module and review quiz question, tagged with its course.
 const bank: ExamQ[] = COURSES.flatMap(c => c.modules.flatMap(m => (m.quiz ? quizzes[m.quiz as keyof typeof quizzes] ?? [] : []).map(q => ({ ...q, domain: c.title }))));
 export default function Practice() {
