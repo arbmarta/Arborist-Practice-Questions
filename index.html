@@ -1,0 +1,87 @@
+---
+layout: default
+title: Disorders and Diagnostics
+tagline: Disorders &amp; Disturbances
+domain: disorders
+description: "Arborist practice questions about tree disorders, diagnostics, and plant health care."
+scripts:
+  - src: script.js
+    defer: true
+---
+
+<div class="page-head">
+	<p class="standfirst">
+		Practice matching key terms to their definitions and to photos, and put the steps
+		of diagnosing a tree problem in the right order.
+	</p>
+</div>
+
+<main>
+
+	<section class="activity" aria-labelledby="terms-heading">
+		<h2 id="terms-heading">Health and diagnostic terms</h2>
+		<p>Drag each term onto its matching definition, or tap a term and then tap the definition it belongs to.</p>
+		<div id="termsMatch" class="match-activity">
+			<div id="termsBank" class="term-bank" aria-label="Terms to place"></div>
+			<div id="termsList" class="match-list"></div>
+		</div>
+		<div class="actions">
+			<button id="checkTermsButton" class="primary" type="button">Check Answers</button>
+			<button id="resetTermsButton" class="secondary" type="button">New Questions</button>
+		</div>
+		<div id="termsFeedback" class="feedback" aria-live="polite"></div>
+	</section>
+
+	<section class="activity" aria-labelledby="photos-heading">
+		<h2 id="photos-heading">Identify signs and symptoms</h2>
+		<p>
+			Is this photo a sign (direct evidence of the causal agent) or a symptom (an effect
+			of the causal agent)? Choose one &mdash; a correct answer moves you to the next photo.
+		</p>
+		<p id="photoQuizProgress" class="photo-progress"></p>
+		<div class="photo-quiz-display">
+			<img id="photoQuizImage" class="quiz-photo" src="" alt="Photo of a tree sign or symptom to identify">
+		</div>
+		<div class="actions photo-choice-actions">
+			<button id="signButton" class="choice-button" type="button">Sign</button>
+			<button id="symptomButton" class="choice-button" type="button">Symptom</button>
+		</div>
+		<div id="photoQuizFeedback" class="feedback" aria-live="polite"></div>
+		<div class="actions">
+			<button id="restartPhotoQuizButton" class="secondary" type="button">Restart</button>
+		</div>
+	</section>
+
+	<section class="activity" aria-labelledby="phc-heading">
+		<h2 id="phc-heading">PHC and control strategies</h2>
+		<p>Drag each term onto its matching definition, or tap a term and then tap the definition it belongs to.</p>
+		<div id="phcMatch" class="match-activity">
+			<div id="phcBank" class="term-bank" aria-label="Terms to place"></div>
+			<div id="phcList" class="match-list"></div>
+		</div>
+		<div class="actions">
+			<button id="checkPhcButton" class="primary" type="button">Check Answers</button>
+			<button id="resetPhcButton" class="secondary" type="button">New Questions</button>
+		</div>
+		<div id="phcFeedback" class="feedback" aria-live="polite"></div>
+	</section>
+
+	<section class="activity" aria-labelledby="steps-heading">
+		<h2 id="steps-heading">Order the diagnostic steps</h2>
+		<p>
+			Drag the steps into the order you should follow when diagnosing a tree problem, from
+			first to last. On a touchscreen or keyboard, use the up and down buttons on each step
+			instead of dragging.
+		</p>
+		<ol id="stepsList" class="steps-list"></ol>
+		<div class="actions">
+			<button id="checkStepsButton" class="primary" type="button">Check Order</button>
+			<button id="revealStepsButton" class="secondary" type="button">Show Correct Order</button>
+			<button id="resetStepsButton" class="secondary" type="button">Shuffle</button>
+		</div>
+		<div id="stepsFeedback" class="feedback" aria-live="polite"></div>
+	</section>
+
+	{% include share.html %}
+
+</main>
