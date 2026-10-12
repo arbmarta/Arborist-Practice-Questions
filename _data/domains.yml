@@ -1,38 +1,47 @@
-# The five domains, in the order they appear in the menu, home page and About page.
 - id: botany
   name: Botany
-  core_idea: How trees are built and function
-  lessons: []
+  core_idea: How trees are built, function, grow, and are identified
+  lessons:
+    - {title: Tree Biology, url: /botany/tree-biology/, description: "Photosynthesis, respiration, tissues, growth, roots, water relations, CODIT, and palms."}
+    - {title: Tree Identification, url: /botany/tree-identification/, description: "Taxonomy and identification using foliage, bark, branching, cones, flowers, and fruit."}
+    - {title: Section Quiz, url: /botany/section-quiz/, description: "Cumulative practice across Botany."}
 
 - id: soils
   name: Soils & Nutrition
   core_idea: The below-ground growing environment
   lessons:
-    - {title: Soil Science, url: /soil-science/, description: "How soils form and how physical, chemical, and biological properties affect trees."}
-    - {title: Soil Analysis, url: /soil-analysis/, description: "Practice using the soil texture triangle and pH scale."}
-    - {title: Water Management, url: /water-management/, description: "Drought, flooding, irrigation, conservation, mulch, and drainage."}
-    - {title: Tree Nutrition, url: /tree-nutrition/, description: "Essential elements, nutrient availability, deficiencies, and testing."}
-    - {title: Tree Fertilization, url: /tree-fertilization/, description: "Fertilizer decisions, application methods, and calculations."}
-    - {title: Section Quiz, url: /soils-nutrition-quiz/, description: "Cumulative practice across Soils & Nutrition."}
+    - {title: Soil Science, url: /soil-and-nutrition/soil-science/, description: "How soils form and how physical, chemical, and biological properties affect trees."}
+    - {title: Soil Analysis, url: /soil-and-nutrition/soil-analysis/, description: "Practice using the soil texture triangle and pH scale."}
+    - {title: Water Management, url: /soil-and-nutrition/water-management/, description: "Drought, flooding, irrigation, conservation, mulch, and drainage."}
+    - {title: Tree Nutrition, url: /soil-and-nutrition/tree-nutrition/, description: "Essential elements, nutrient availability, deficiencies, and testing."}
+    - {title: Tree Fertilization, url: /soil-and-nutrition/tree-fertilization/, description: "Fertilizer decisions, application methods, and calculations."}
+    - {title: Section Quiz, url: /soil-and-nutrition/section-quiz/, description: "Cumulative practice across Soils & Nutrition."}
 
 - id: disorders
   name: Disorders & Disturbances
   core_idea: What damages or impairs trees
   lessons:
-    - {title: Abiotic Disturbances, url: /abiotic-disturbances/, description: "Nonliving stressors, injury patterns, and common abiotic disorders."}
-    - {title: Pests & Pathogens, url: /pests-pathogens/, description: "Common pest groups, diseases, disease development, and invasive species."}
-    - {title: Tree Diagnostics, url: /tree-diagnostics/, description: "Signs, symptoms, diagnostic vocabulary, and a systematic diagnostic process."}
-    - {title: Plant Health Care, url: /plant-health-care/, description: "PHC, IPM, monitoring, action thresholds, and control strategies."}
-    - {title: Diagnostic Practice, url: /disorders/, description: "Interactive matching, signs and symptoms, and diagnostic sequencing."}
-    - {title: Section Quiz, url: /disorders-disturbances-quiz/, description: "Cumulative practice across Disorders & Disturbances."}
+    - {title: Abiotic Disturbances, url: /disorders-and-disturbances/abiotic-disturbances/, description: "Nonliving stressors, injury patterns, and common abiotic disorders."}
+    - {title: Pests & Pathogens, url: /disorders-and-disturbances/pests-and-pathogens/, description: "Common pest groups, diseases, disease development, and invasive species."}
+    - {title: Tree Diagnostics, url: /disorders-and-disturbances/tree-diagnostics/, description: "Signs, symptoms, diagnostic vocabulary, and a systematic diagnostic process."}
+    - {title: Plant Health Care, url: /disorders-and-disturbances/plant-health-care/, description: "PHC, IPM, monitoring, action thresholds, and control strategies."}
+    - {title: Diagnostic Practice, url: /disorders-and-disturbances/diagnostic-practice/, description: "Interactive matching, signs and symptoms, and diagnostic sequencing."}
+    - {title: Section Quiz, url: /disorders-and-disturbances/section-quiz/, description: "Cumulative practice across Disorders & Disturbances."}
 
 - id: operations
   name: Arboriculture Operations
   core_idea: Practical management of individual trees
   lessons:
-    - {title: Pruning, url: /pruning/, description: "Pruning biology, cuts, timing, objectives, systems, and special cases."}
+    - {title: Pruning, url: /arboriculture-operations/pruning/, description: "Pruning biology, cuts, timing, objectives, systems, and special cases."}
+    - {title: Tree Selection, Planting & Establishment, url: /arboriculture-operations/tree-selection-and-planting/, description: "Site matching, nursery stock, planting, staking, mulch, irrigation, and establishment."}
+    - {title: Tree Worker Safety & Climbing, url: /arboriculture-operations/worker-safety-and-climbing/, description: "PPE, work zones, communication, electrical hazards, climbing systems, and emergency response."}
+    - {title: Tree Risk, Support & Lightning Protection, url: /arboriculture-operations/tree-risk-and-support/, description: "Loads, defects, targets, risk assessment, mitigation, support systems, and lightning protection."}
+    - {title: Section Quiz, url: /arboriculture-operations/section-quiz/, description: "Cumulative practice across Arboriculture Operations."}
 
 - id: urban-forestry
   name: Urban Forestry
   core_idea: Management of trees at population and landscape scale
-  lessons: []
+  lessons:
+    - {title: Urban Forest Management, url: /urban-forestry/urban-forest-management/, description: "Benefits, inventories, canopy, planning, maintenance, emergency response, and wood waste."}
+    - {title: Trees & Construction, url: /urban-forestry/trees-and-construction/, description: "Protection zones, roots, compaction, grade changes, exposure, and development phases."}
+    - {title: Section Quiz, url: /urban-forestry/section-quiz/, description: "Cumulative practice across Urban Forestry."}
