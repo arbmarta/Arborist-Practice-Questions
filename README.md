@@ -1,6 +1,6 @@
 # Arborist Practice Questions
 
-Interactive practice activities for the PNW-ISA Certified Arborist Prep Course.
+An interactive arboriculture learning resource built with Jekyll and GitHub Pages.
 The site is built by GitHub Pages with Jekyll and shares its layout and styling
 with the Canadian Urban Forest Census site.
 

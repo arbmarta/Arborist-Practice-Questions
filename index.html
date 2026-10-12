@@ -1,29 +1,27 @@
 ---
 layout: default
-description: "Interactive practice activities for the PNW-ISA Certified Arborist Prep Course, organized into five domains: botany, soils and nutrition, disorders and disturbances, arboriculture operations, and urban forestry."
-tagline: "Interactive study activities for the PNW-ISA Certified Arborist Prep Course"
-body_class: home
+description: "Interactive arboriculture lessons, practice activities, and section quizzes organized across five learning domains."
+tagline: "Interactive lessons and practice for arboriculture"
 ---
 
 <main class="flush-bottom">
-
 	<p class="lede">
-		These activities let you practice the calculations, terms, and diagnostic steps
-		covered in the PNW-ISA Certified Arborist Prep Course. Each lesson generates new
-		questions, so you can work through it as many times as you like.
+		Explore arboriculture through concise lessons, interactive activities, diagnostic scenarios,
+		and cumulative quizzes. Choose a domain below, or use the navigation menus above to jump
+		directly to a topic.
 	</p>
 
 	<div class="paper">
-		<span class="kicker">Before you start</span>
+		<span class="kicker">Using this resource</span>
 		<p>
-			Where discrepancies between this website and the ISA textbook exist, always
-			defer to the ISA textbook. <a href="{{ '/about/' | relative_url }}">About this project</a>
+			Lessons introduce and connect key concepts; practice activities let you apply them;
+			section quizzes bring material together across each domain. Where this resource differs
+			from current ISA guidance or your required reference materials, defer to those sources.
+			<a href="{{ '/about/' | relative_url }}">About this project</a>
 		</p>
 	</div>
-
 </main>
 
-{%- comment -%} One block per domain, built from _data/domains.yml {%- endcomment -%}
 {% for domain in site.data.domains %}
 <div class="section-heading domain-heading">
 	<h2>{{ domain.name }}</h2>
@@ -40,7 +38,7 @@ body_class: home
 	{%- else %}
 	<div class="card card-soon">
 		<h4>Lessons coming soon</h4>
-		<p>Practice activities for {{ domain.name | downcase | replace: "&", "and" }} are being written.</p>
+		<p>Learning material for {{ domain.name | downcase | replace: "&", "and" }} is being developed.</p>
 		<span class="card-tag">Under construction</span>
 	</div>
 	{%- endfor %}

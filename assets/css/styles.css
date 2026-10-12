@@ -29,7 +29,7 @@ body {
    The photo is pinned to the right edge at full banner height. Its left edge
    fades to a flat light grey, and --hero-bg continues that grey across the
    rest of the banner, so the photo blends into the page at any width.
-   The home page overrides .hero height to fill the viewport. */
+   The same long-format banner is used consistently across the site. */
 
 :root { --hero-bg: #f5f5f5; }
 
@@ -536,21 +536,6 @@ footer a { color: var(--gray70); }
 	main p, main li { font-size: 17px; line-height: 27px; }
 	.lede { font-size: 19px; line-height: 30px; }
 	.pull p { font-size: 19px; line-height: 29px; }
-}
-
-/* ==========================================================================
-   Home page: hero fills the viewport
-   ========================================================================== */
-
-body.home .hero { height: 100dvh; }
-body.home .hero-text { bottom: 125px; }
-body.home .hero-text h1 { font-size: 58px; }
-
-@media (max-width: 650px) {
-	body.home .hero { height: 100dvh; }
-	body.home .hero-text { bottom: 60px; }
-	body.home .hero-text h1 { font-size: 38px; }
-	body.home .hero::after { background: linear-gradient(to top, var(--hero-bg) 0%, var(--hero-bg) 30%, rgba(245,245,245,0) 55%); }
 }
 
 /* ==========================================================================
@@ -1243,3 +1228,17 @@ input.answer-input, .bag-answer { text-align: center; }
 .source-note { margin-top: 54px; padding-top: 18px; border-top: 1px solid var(--gray); }
 .source-note p { font-size: 14px; line-height: 22px; color: var(--gray70); }
 @media (max-width: 620px) { .concept-grid { grid-template-columns: 1fr; } }
+
+/* ---------- section quizzes ---------- */
+.quiz-toolbar { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:20px; }
+.quiz-toolbar p { margin:0; font-family:"Open Sans",sans-serif; color:var(--gray70); }
+.quiz-question { border:0; border-top:1px solid var(--gray); padding:24px 0 20px; margin:0; }
+.quiz-question legend { width:100%; font-family:Archivo,"Helvetica Neue",Arial,sans-serif; font-weight:600; font-size:19px; line-height:28px; color:var(--gray90); margin-bottom:12px; }
+.quiz-question legend span { color:var(--green-med); }
+.quiz-question label { display:block; padding:10px 12px; margin:6px 0; border:1px solid var(--gray); cursor:pointer; font-family:"Open Sans",sans-serif; font-size:15px; line-height:22px; }
+.quiz-question label:hover { background:#fbfbf8; }
+.quiz-question input { margin-right:8px; }
+.answer-explanation { margin-top:10px; padding:12px 14px; background:var(--sand); font-family:"Source Serif 4",Georgia,serif; font-size:16px; line-height:24px; }
+.process-list { padding-left:24px; }
+.process-list li { margin:0 0 14px; font-family:"Source Serif 4",Georgia,serif; font-size:17px; line-height:27px; }
+@media (max-width:620px) { .quiz-toolbar { align-items:flex-start; flex-direction:column; } }

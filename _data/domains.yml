@@ -1,7 +1,4 @@
 # The five domains, in the order they appear in the menu, home page and About page.
-# To add a lesson, list it under its domain with a title, url and one-line description.
-# A domain with no lessons shows as "Under construction".
-
 - id: botany
   name: Botany
   core_idea: How trees are built and function
@@ -11,34 +8,29 @@
   name: Soils & Nutrition
   core_idea: The below-ground growing environment
   lessons:
-    - title: Soil Science
-      url: /soil-science/
-      description: Learn how soils form and how their physical, chemical, and biological properties affect trees.
-    - title: Soil Analysis
-      url: /soil-analysis/
-      description: Practice using the soil texture triangle and pH scale.
-    - title: Water Management
-      url: /water-management/
-      description: Understand drought, flooding, irrigation, conservation, mulch, and drainage.
-    - title: Tree Nutrition
-      url: /tree-nutrition/
-      description: Review essential elements, nutrient availability, deficiencies, and testing.
-    - title: Tree Fertilization
-      url: /tree-fertilization/
-      description: Learn fertilizer application concepts and practice calculations from guaranteed analyses.
+    - {title: Soil Science, url: /soil-science/, description: "How soils form and how physical, chemical, and biological properties affect trees."}
+    - {title: Soil Analysis, url: /soil-analysis/, description: "Practice using the soil texture triangle and pH scale."}
+    - {title: Water Management, url: /water-management/, description: "Drought, flooding, irrigation, conservation, mulch, and drainage."}
+    - {title: Tree Nutrition, url: /tree-nutrition/, description: "Essential elements, nutrient availability, deficiencies, and testing."}
+    - {title: Tree Fertilization, url: /tree-fertilization/, description: "Fertilizer decisions, application methods, and calculations."}
+    - {title: Section Quiz, url: /soils-nutrition-quiz/, description: "Cumulative practice across Soils & Nutrition."}
 
 - id: disorders
   name: Disorders & Disturbances
   core_idea: What damages or impairs trees
   lessons:
-    - title: Disorders and Diagnostics
-      url: /disorders/
-      description: Define important terms, tell signs from symptoms, and order the diagnostic steps.
+    - {title: Abiotic Disturbances, url: /abiotic-disturbances/, description: "Nonliving stressors, injury patterns, and common abiotic disorders."}
+    - {title: Pests & Pathogens, url: /pests-pathogens/, description: "Common pest groups, diseases, disease development, and invasive species."}
+    - {title: Tree Diagnostics, url: /tree-diagnostics/, description: "Signs, symptoms, diagnostic vocabulary, and a systematic diagnostic process."}
+    - {title: Plant Health Care, url: /plant-health-care/, description: "PHC, IPM, monitoring, action thresholds, and control strategies."}
+    - {title: Diagnostic Practice, url: /disorders/, description: "Interactive matching, signs and symptoms, and diagnostic sequencing."}
+    - {title: Section Quiz, url: /disorders-disturbances-quiz/, description: "Cumulative practice across Disorders & Disturbances."}
 
 - id: operations
   name: Arboriculture Operations
   core_idea: Practical management of individual trees
-  lessons: []
+  lessons:
+    - {title: Pruning, url: /pruning/, description: "Pruning biology, cuts, timing, objectives, systems, and special cases."}
 
 - id: urban-forestry
   name: Urban Forestry
