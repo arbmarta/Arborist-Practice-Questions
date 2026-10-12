@@ -436,7 +436,8 @@ Hint 2: Nutrient mass (${practiceUnit}) = bag mass (${practiceUnit}) \u00d7 nutr
 
   // ---- Wire up events ---------------------------------------------------
 
-  document.addEventListener("DOMContentLoaded", () => {
+  // Run now if the page is already loaded (scripts are injected after hydration in the Next.js site).
+  ((init) => (document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", init) : init()))(() => {
     practiceRowsState = pickPracticeRows();
     setPracticeUnit(practiceUnit);
     resetBags();

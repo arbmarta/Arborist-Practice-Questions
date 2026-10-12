@@ -1,3 +1,3 @@
 import './globals.css';import Shell from '@/components/Shell';
-export const metadata={title:{default:'Arborist Study',template:'%s | Arborist Study'},description:'Interactive arboriculture lessons and practice.'};
+export const metadata={title:{default:'Arborist Study',template:'%s | Arborist Study'},description:'Interactive arboriculture lessons and practice.',openGraph:{title:'Arborist Study',description:'Interactive arboriculture lessons and practice.',images:[{url:'https://arbmarta.github.io/Arborist-Practice-Questions/images/web-card.jpg',width:1200,height:630}]},twitter:{card:'summary_large_image',images:['https://arbmarta.github.io/Arborist-Practice-Questions/images/web-card.jpg']}};
 export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body><Shell>{children}</Shell></body></html>}

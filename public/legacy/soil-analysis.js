@@ -9,7 +9,7 @@
   // boundary) so grading is unambiguous.
   const texturePool = [
     { sand: 90, silt: 5, clay: 5, texture: "sand" },
-    { sand: 80, silt: 10, clay: 10, texture: "loamy sand" },
+    { sand: 82, silt: 10, clay: 8, texture: "loamy sand" },
     { sand: 65, silt: 25, clay: 10, texture: "sandy loam" },
     { sand: 40, silt: 40, clay: 20, texture: "loam" },
     { sand: 20, silt: 65, clay: 15, texture: "silt loam" },
@@ -206,7 +206,8 @@
 
   // ---- Wire up events ---------------------------------------------------
 
-  document.addEventListener("DOMContentLoaded", () => {
+  // Run now if the page is already loaded (scripts are injected after hydration in the Next.js site).
+  ((init) => (document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", init) : init()))(() => {
     resetTexture();
     document.getElementById("checkTextureButton").addEventListener("click", checkTexture);
     document.getElementById("resetTextureButton").addEventListener("click", resetTexture);

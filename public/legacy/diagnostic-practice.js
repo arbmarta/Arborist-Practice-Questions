@@ -610,7 +610,8 @@
 
   // ---- Wire everything up --------------------------------------------------
 
-  document.addEventListener("DOMContentLoaded", () => {
+  // Run now if the page is already loaded (scripts are injected after hydration in the Next.js site).
+  ((init) => (document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", init) : init()))(() => {
     initMatchingSection(healthConcepts, 8, {
       wrapper: "termsMatch",
       bank: "termsBank",

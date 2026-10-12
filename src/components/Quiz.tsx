@@ -1,8 +1,11 @@
 'use client';
-import {useMemo,useState,useEffect} from 'react';
+import {useState,useEffect} from 'react';
 type Q={q:string;o:readonly string[];a:number;e:string};
+// Fisher-Yates shuffle; question order and answer order both change on every attempt.
+function shuffle<T>(arr:readonly T[]):T[]{const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 export default function Quiz({questions,storageKey}:{questions:readonly Q[],storageKey:string}){
- const [attempt,setAttempt]=useState(0); const qs=useMemo(()=>[...questions].sort(()=>Math.random()-.5),[questions,attempt]);
+ const [attempt,setAttempt]=useState(0); const [qs,setQs]=useState<Q[]>(()=>[...questions]);
+ useEffect(()=>{setQs(shuffle(questions).map(q=>{const order=shuffle(q.o.map((_,j)=>j));return {...q,o:order.map(j=>q.o[j]),a:order.indexOf(q.a)}}))},[questions,attempt]);
  const [answers,setAnswers]=useState<Record<number,number>>({}); const [graded,setGraded]=useState(false); const [best,setBest]=useState<number|null>(null);
  useEffect(()=>{const v=localStorage.getItem(storageKey); if(v)setBest(Number(v));},[storageKey]);
  const score=graded?qs.reduce((n,q,i)=>n+(answers[i]===q.a?1:0),0):0;
