@@ -1,2 +1,3 @@
-import Link from 'next/link';import {domains} from '@/lib/navigation';
-export default function Home(){return <main><div className="hero" style={{"--hero-img":`url(${process.env.NEXT_PUBLIC_BASE_PATH||''}/images/TitleImage.jpg)`} as React.CSSProperties}><p className="eyebrow">Interactive arboriculture learning</p><h1>Build knowledge. Practice decisions. Check your understanding.</h1><p>Concise lessons, applied activities, and cumulative quizzes across five arboriculture domains.</p><div className="hero-actions"><Link className="primary linkbutton" href="/practice/">Start practice</Link><Link className="secondary linkbutton" href="/botany/tree-biology/">Start learning</Link></div></div>{domains.map(d=><section className="domain" key={d.slug}><h2>{d.name}</h2><div className="cards">{d.lessons.map(l=><Link className="card" key={l.slug} href={`/${d.slug}/${l.slug}/`}><h3>{l.title}</h3><span>Open →</span></Link>)}</div></section>)}</main>}
+import Dashboard from '@/components/course/Dashboard';
+export const metadata = { title: 'Dashboard' };
+export default function Home() { return <Dashboard />; }

@@ -4,6 +4,9 @@
 // diagnosis steps.
 
 (function () {
+  // Images live beside the original page; resolve them from this script's own URL so they load at any page address.
+  const ASSET_BASE = (document.currentScript && document.currentScript.src ? document.currentScript.src.replace(/legacy\/[^/]+$/, "") : "/") + "disorders-and-disturbances/diagnostic-practice/";
+
   "use strict";
 
   function shuffleArray(arr) {
@@ -184,7 +187,7 @@
           row.classList.add("has-photo");
           const img = document.createElement("img");
           img.className = "match-photo";
-          img.src = item.image;
+          img.src = ASSET_BASE + item.image;
           img.alt = "Photo of a tree sign or symptom to identify";
           img.loading = "lazy";
           img.addEventListener("error", () => {
@@ -375,7 +378,7 @@
         console.warn(`Missing image for "${item.term}" — expected at ${item.image}`);
         imageEl.alt = "Photo not found — check the file path in disorders/images/";
       };
-      imageEl.src = item.image;
+      imageEl.src = ASSET_BASE + item.image;
     }
 
     function updateProgress() {

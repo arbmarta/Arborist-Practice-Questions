@@ -2,6 +2,9 @@
 // Generates the practice table, grades answers, and runs the "bags needed" challenge.
 
 (function () {
+  // Images live beside the original page; resolve them from this script's own URL so they load at any page address.
+  const ASSET_BASE = (document.currentScript && document.currentScript.src ? document.currentScript.src.replace(/legacy\/[^/]+$/, "") : "/") + "soil-and-nutrition/tree-fertilization/";
+
   "use strict";
 
   // ---- Data -----------------------------------------------------------
@@ -338,7 +341,7 @@ Hint 2: Nutrient mass (${practiceUnit}) = bag mass (${practiceUnit}) \u00d7 nutr
   function renderQuiz() {
     const bagImage = document.getElementById("bagImage");
     if (bagImage) {
-      bagImage.src = quizState.file;
+      bagImage.src = ASSET_BASE + quizState.file;
       bagImage.alt = `Fertilizer bag labeled ${quizState.values.n}-${quizState.values.p}-${quizState.values.k}, net weight ${BAG_WEIGHT_LB} lb`;
     }
 
