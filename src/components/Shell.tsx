@@ -1,0 +1,3 @@
+'use client';
+import Link from 'next/link';import {useState} from 'react';import {domains} from '@/lib/navigation';
+export default function Shell({children}:{children:React.ReactNode}){const [open,setOpen]=useState(false);return <><header><Link className="brand" href="/">Arborist Study</Link><button className="menu" onClick={()=>setOpen(!open)} aria-label="Toggle navigation">☰</button><nav className={open?'open':''}><Link href="/practice/">Practice</Link><Link href="/about/">About</Link></nav></header><div className="app"><aside>{domains.map(d=><section key={d.slug}><h3>{d.name}</h3>{d.lessons.map(l=><Link key={l.slug} href={`/${d.slug}/${l.slug}/`}>{l.title}</Link>)}</section>)}</aside><div className="content">{children}</div></div></>}

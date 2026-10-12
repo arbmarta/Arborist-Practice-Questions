@@ -1,0 +1,2 @@
+import Link from 'next/link';import {domains} from '@/lib/navigation';
+export default function Practice(){return <main><div className="page-head"><p className="eyebrow">Practice</p><h1>Choose a section quiz</h1><p>Each quiz gives immediate explanations and saves your best score in this browser.</p></div><div className="cards">{domains.map(d=><Link className="card" href={`/${d.slug}/section-quiz/`} key={d.slug}><h3>{d.name}</h3><p>Cumulative section practice</p><span>Start quiz →</span></Link>)}</div></main>}
