@@ -1,0 +1,53 @@
+---
+layout: default
+title: Soil Analysis
+tagline: Soils &amp; Nutrition
+domain: soils
+description: "Arborist practice questions on soil analysis: the soil texture triangle and the pH scale."
+scripts:
+  - src: script.js
+    defer: true
+---
+
+<div class="page-head">
+	<p class="standfirst">
+		Practice using the soil texture triangle and the pH scale.
+	</p>
+</div>
+
+<main>
+
+	<section class="activity" aria-labelledby="triangle-heading">
+		<h2 id="triangle-heading">Using the soil texture triangle</h2>
+		<p>
+			The soil texture triangle plots the percentages of sand, silt, and clay in a soil
+			sample to determine its texture class. Given any two of the three percentages, the
+			third can be found by subtracting from 100%, and the texture class can be read from
+			where those values intersect on the triangle.
+		</p>
+		<figure class="activity-figure">
+			<img src="usda_texture_triangle.jpg" alt="USDA soil texture triangle diagram showing the percentages of sand, silt, and clay that define each soil texture class">
+			<figcaption>Source: USDA Forest Service</figcaption>
+		</figure>
+		<div id="textureQuestions" class="question-list"></div>
+		<div class="actions">
+			<button id="checkTextureButton" class="primary" type="button">Check Answers</button>
+			<button id="resetTextureButton" class="secondary" type="button">New Questions</button>
+		</div>
+		<div id="textureFeedback" class="feedback" aria-live="polite"></div>
+	</section>
+
+	<section class="activity" aria-labelledby="ph-heading">
+		<h2 id="ph-heading">Using the pH scale</h2>
+		<p>The pH scale runs from 0 to 14, with plants often preferring a pH between 6.0 and 6.5.</p>
+		<div id="phQuestions" class="question-list"></div>
+		<div class="actions">
+			<button id="checkPhButton" class="primary" type="button">Check Answers</button>
+			<button id="resetPhButton" class="secondary" type="button">New Questions</button>
+		</div>
+		<div id="phFeedback" class="feedback" aria-live="polite"></div>
+	</section>
+
+	{% include share.html %}
+
+</main>
