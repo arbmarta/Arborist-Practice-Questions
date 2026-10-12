@@ -1,52 +1,67 @@
 ---
 layout: default
-description: "Interactive practice activities for the PNW-ISA Certified Arborist Prep Course, organized into five domains: botany, soils and nutrition, disorders and disturbances, arboriculture operations, and urban forestry."
-tagline: "Interactive study activities for the PNW-ISA Certified Arborist Prep Course"
-body_class: home
+title: About
+description: "Objectives, background, and project team for Arborist Practice Questions, a set of interactive study activities for the PNW-ISA Certified Arborist Prep Course."
 ---
 
-<main class="flush-bottom">
-
-	<p class="lede">
-		These activities let you practice the calculations, terms, and diagnostic steps
-		covered in the PNW-ISA Certified Arborist Prep Course. Each lesson generates new
-		questions, so you can work through it as many times as you like.
+<div class="page-head">
+	<p class="standfirst">
+		Arborist Practice Questions is a set of free, interactive study activities built to
+		support the PNW-ISA Certified Arborist Prep Course.
 	</p>
-
-	<div class="paper">
-		<span class="kicker">Before you start</span>
-		<p>
-			Where discrepancies between this website and the ISA textbook exist, always
-			defer to the ISA textbook. <a href="{{ '/about/' | relative_url }}">About this project</a>
-		</p>
-	</div>
-
-</main>
-
-{%- comment -%} One block per domain, built from _data/domains.yml {%- endcomment -%}
-{% for domain in site.data.domains %}
-<div class="section-heading domain-heading">
-	<h2>{{ domain.name }}</h2>
-	<p>{{ domain.core_idea }}</p>
 </div>
-
-<div class="cards">
-	{%- for lesson in domain.lessons %}
-	<a class="card" href="{{ lesson.url | relative_url }}">
-		<h4>{{ lesson.title }}</h4>
-		<p>{{ lesson.description }}</p>
-		<span class="arrow">&rarr;</span>
-	</a>
-	{%- else %}
-	<div class="card card-soon">
-		<h4>Lessons coming soon</h4>
-		<p>Practice activities for {{ domain.name | downcase | replace: "&", "and" }} are being written.</p>
-		<span class="card-tag">Under construction</span>
-	</div>
-	{%- endfor %}
-</div>
-{% endfor %}
 
 <main>
+
+	<h2>Objectives &amp; Background</h2>
+
+	<p>
+		Preparing for the ISA Certified Arborist exam means working through a wide body of
+		knowledge, from tree biology and soil science to diagnosis, field operations, and the
+		management of whole urban forests. Reading alone rarely makes that knowledge stick.
+		This website gives course participants a place to practice: each lesson generates
+		new questions every time, checks answers immediately, and explains where an answer
+		went wrong.
+	</p>
+
+	<p>
+		The activities are organized into five domains, each covering a part of the course
+		content.
+	</p>
+
+	<table class="domain-table">
+		<thead>
+			<tr><th scope="col">Domain</th><th scope="col">Core idea</th></tr>
+		</thead>
+		<tbody>
+			{%- for domain in site.data.domains %}
+			<tr><th scope="row">{{ domain.name }}</th><td>{{ domain.core_idea }}</td></tr>
+			{%- endfor %}
+		</tbody>
+	</table>
+
+	<p>
+		The questions are a study aid, not a replacement for the course textbook. Where
+		discrepancies between this website and the ISA textbook exist, always defer to the
+		ISA textbook.
+	</p>
+
+	<h2>Project Team</h2>
+
+	<ul class="team">
+		<li>
+			<span class="name">Alexander Martin</span>
+			<span class="role">Website development</span>
+		</li>
+		<!--
+		To add a team member, copy this block inside the list:
+		<li>
+			<span class="name">Name</span>
+			<span class="role">Role or affiliation</span>
+		</li>
+		-->
+	</ul>
+
 	{% include share.html %}
+
 </main>
