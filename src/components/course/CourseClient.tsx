@@ -19,10 +19,10 @@ const ACTIVITIES: Record<ActivityId, React.ComponentType> = {
 export function Activity({ id }: { id: ActivityId }) { const C = ACTIVITIES[id]; return <C />; }
 
 /** Shows children only to enrolled students; otherwise an enroll prompt. Marks the item as viewed. */
-export function EnrollGate({ course, href, children }: { course: string; href: string; children: React.ReactNode }) {
+export function EnrollGate({ course, href = '', track = true, children }: { course: string; href?: string; track?: boolean; children: React.ReactNode }) {
   const s = useStudent();
   const enrolled = !!s?.enrolled.includes(course);
-  useEffect(() => { if (enrolled) markVisited(course, href); }, [enrolled, course, href]);
+  useEffect(() => { if (enrolled && track && href) markVisited(course, href); }, [enrolled, course, href, track]);
   if (!s) return <div className="gate-loading" aria-busy="true" />;
   if (!enrolled) {
     const c = findCourse(course)!;
@@ -41,7 +41,7 @@ export function ModuleQuiz({ course, module, questions }: { course: string; modu
   const r = s?.grades[course]?.[module];
   return <>
     {r && <p className="quiz-record">Best score: <b>{r.best}%</b> · Last attempt: {r.last}% · Attempts: {r.attempts}</p>}
-    <Quiz questions={questions} storageKey={`quiz:${course}/${module}`} onGraded={pct => recordQuiz(course, module, pct)} />
+    <Quiz hideBest questions={questions} storageKey={`quiz:${course}/${module}`} onGraded={pct => recordQuiz(course, module, pct)} />
   </>;
 }
 

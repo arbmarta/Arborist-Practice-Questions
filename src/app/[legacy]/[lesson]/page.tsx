@@ -14,6 +14,7 @@ function target(domain: string, lesson: string) {
     return `/courses/${course}/`;
   }
   if (lesson === 'section-quiz') return `/courses/${course}/course-review/quiz/`;
+  if (lesson === 'soil-analysis' || lesson === 'diagnostic-practice') return `/courses/${course}/${lesson}/interactive/`;
   return `/courses/${course}/${lesson}/reading/`;
 }
 export function generateStaticParams() {

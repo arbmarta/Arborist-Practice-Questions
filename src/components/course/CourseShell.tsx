@@ -40,6 +40,7 @@ export default function CourseShell({ courseSlug, children }: { courseSlug: stri
             <button className="cn-toggle" aria-expanded={!!open.shortcuts} onClick={() => toggle('shortcuts')}><Chevron /><span>Course Shortcuts</span></button>
             {open.shortcuts && <div className="cn-links shortcuts">
               {link(`/courses/${course.slug}/`, 'Home')}
+              {link(`/courses/${course.slug}/discussions/`, 'Discussions')}
               {link(`/courses/${course.slug}/grades/`, 'Grades')}
             </div>}
           </section>

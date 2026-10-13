@@ -31,6 +31,8 @@ export type Module = {
   reading?: string;
   /** Interactive activity for this module. 'legacy' = the worksheet built into the reading page. */
   interactive?: ActivityId | 'legacy';
+  /** Key into `pages` for hands-on practice material shown on the Interactive page (below any activity). */
+  practical?: string;
   /** Key into `quizzes` in content.ts for the Module Quiz. */
   quiz?: string;
   /** Which items this module has (defaults to all five). */
@@ -96,7 +98,7 @@ const COURSE_LIST: Course[] = [
     outcomes: ['Describe soil formation, horizons, structure and pore space', 'Determine soil texture with the texture triangle', 'Plan irrigation and drainage around tree needs', 'Read N-P-K labels and calculate fertilizer amounts'],
     modules: [
       { slug: 'soil-science', title: 'Soil Science', reading: '/soil-and-nutrition/soil-science' },
-      { slug: 'soil-analysis', title: 'Soil Analysis', reading: '/soil-and-nutrition/soil-analysis', interactive: 'soil-triangle' },
+      { slug: 'soil-analysis', title: 'Soil Analysis', interactive: 'soil-triangle', practical: '/soil-and-nutrition/soil-analysis' },
       { slug: 'water-management', title: 'Water Management', reading: '/soil-and-nutrition/water-management' },
       { slug: 'tree-nutrition', title: 'Tree Nutrition', reading: '/soil-and-nutrition/tree-nutrition' },
       { slug: 'tree-fertilization', title: 'Tree Fertilization', reading: '/soil-and-nutrition/tree-fertilization', interactive: 'legacy' },
@@ -113,7 +115,7 @@ const COURSE_LIST: Course[] = [
       { slug: 'pests-and-pathogens', title: 'Pests and Pathogens', reading: '/disorders-and-disturbances/pests-and-pathogens' },
       { slug: 'tree-diagnostics', title: 'Tree Diagnostics', reading: '/disorders-and-disturbances/tree-diagnostics' },
       { slug: 'plant-health-care', title: 'Plant Health Care', reading: '/disorders-and-disturbances/plant-health-care' },
-      { slug: 'diagnostic-practice', title: 'Diagnostic Practice', reading: '/disorders-and-disturbances/diagnostic-practice', interactive: 'legacy' },
+      { slug: 'diagnostic-practice', title: 'Diagnostic Practice', practical: '/disorders-and-disturbances/diagnostic-practice' },
       { slug: 'course-review', title: 'Course Review', quiz: '/disorders-and-disturbances/section-quiz', items: ['quiz'] },
     ],
   },
@@ -156,7 +158,7 @@ export function itemTitle(c: Course, m: Module, k: ItemKind): string {
     case 'introduction': return `Module ${n} Introduction: ${m.title}`;
     case 'video': return `Video Lecture: ${m.title}`;
     case 'reading': return `Reading: ${m.title}`;
-    case 'interactive': return m.interactive && m.interactive !== 'legacy' ? `Interactive: ${ACTIVITY_TITLES[m.interactive]}` : `Interactive: ${m.title}`;
+    case 'interactive': return m.interactive && m.interactive !== 'legacy' && !m.practical ? `Interactive: ${ACTIVITY_TITLES[m.interactive]}` : `Interactive: ${m.title}`;
     case 'quiz': return review ? `${c.title} Review Quiz` : `Module ${n} Quiz: ${m.title}`;
     case 'survey': return 'Course Exit Survey';
   }

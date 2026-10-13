@@ -14,7 +14,7 @@ export default async function CourseHome({ params }: { params: Promise<{ course:
   const c = findCourse((await params).course); if (!c) notFound();
   const graded = gradedModules(c, Object.keys(quizzes));
   const activities = c.modules.map(m => m.interactive).filter((a): a is ActivityId => !!a && a !== 'legacy');
-  const hasWorksheet = c.modules.some(m => m.interactive === 'legacy');
+  const hasWorksheet = c.modules.some(m => m.interactive === 'legacy' || m.practical);
   const lessonModules = c.modules.filter(m => !m.items || m.items.length > 1).length;
   return (
     <main className="course-home">
@@ -40,7 +40,7 @@ export default async function CourseHome({ params }: { params: Promise<{ course:
           <p>{c.description}</p>
         </div>
         <aside className="ch-side">
-          <h2>What you&apos;ll do</h2>
+          <h2>Learning objectives</h2>
           <ul className="outcomes">{c.outcomes.map(o => <li key={o}>{o}</li>)}</ul>
         </aside>
       </div>

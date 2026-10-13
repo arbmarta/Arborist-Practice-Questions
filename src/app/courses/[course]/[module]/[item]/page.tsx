@@ -39,6 +39,7 @@ export default async function ItemPage({ params }: { params: Promise<Params> }) 
   const n = c.modules.indexOf(m) + 1;
   const href = itemHref(c, m, k);
   const html = m.reading ? pages[m.reading as keyof typeof pages] : undefined;
+  const practical = m.practical ? pages[m.practical as keyof typeof pages] : undefined;
   const questions = m.quiz ? quizzes[m.quiz as keyof typeof quizzes] : undefined;
 
   let body: React.ReactNode;
@@ -63,7 +64,10 @@ export default async function ItemPage({ params }: { params: Promise<Params> }) 
     case 'interactive':
       body = m.interactive === 'legacy'
         ? <div className="placeholder"><p><b>This module&apos;s interactive worksheet is part of the reading.</b></p><p><Link href={itemHref(c, m, 'reading')}>Open the reading and worksheet →</Link></p></div>
-        : m.interactive ? <Activity id={m.interactive} /> : <Placeholder what="The interactive activity" />;
+        : (m.interactive || practical) ? <>
+            {m.interactive && <Activity id={m.interactive} />}
+            {practical && <><article className="lesson practical" dangerouslySetInnerHTML={{ __html: linkTerms(withBase(practical)) }} /><LegacyActivity path={m.practical!} /></>}
+          </> : <Placeholder what="The interactive activity" />;
       break;
     case 'survey':
       body = <ExitSurvey course={c.slug} />;

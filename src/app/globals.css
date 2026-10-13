@@ -360,7 +360,12 @@ header nav a{padding:20px 0}
 .course-menu .menu-icon{width:30px;height:20px}
 .course-menu-inline{display:none;padding:14px 0 0 clamp(20px,3.5vw,48px);margin:0;align-items:flex-start}
 .course-shell.nav-collapsed .course-main>main,.course-main>.course-menu-inline+main{padding-top:20px}
-.course-shell.nav-collapsed{grid-template-columns:0 minmax(0,1fr)}
+.course-shell.nav-collapsed{grid-template-columns:minmax(0,1fr)}
+/* keep the content in its own column so hiding the panel can never squeeze it into the panel's slot */
+.course-main{grid-column:2}
+.course-shell.nav-collapsed .course-main{grid-column:1}
+.course-shell.nav-collapsed .course-main>main{margin:0 auto}
+.course-shell.nav-collapsed .course-menu-inline{margin-left:max(0px,calc((100% - 1120px) / 2))}
 .course-shell.nav-collapsed .course-nav{display:none}
 .course-shell.nav-collapsed .course-menu-inline{display:flex}
 .cn-group{border-bottom:1px solid #d6d6d6}
@@ -495,3 +500,19 @@ header nav a{padding:20px 0}
 .gloss-close{appearance:none;border:0;background:none;font-size:1.4rem;line-height:1;cursor:pointer;color:var(--muted);padding:0 2px}
 .gloss-term-name{font-weight:800;font-size:1.08rem!important;margin:2px 0 4px!important}
 @keyframes glossIn{from{opacity:0}to{opacity:1}}
+
+/* quiz feedback: wrong in red, correct in green */
+.quiz-question label.opt-right{background:#e6f2ea;outline:2px solid #2f7a4d;color:#1f5133}
+.quiz-question label.opt-wrong{background:#fbefef;outline:2px solid #a33333;color:#7d2424}
+.quiz-question label{display:flex;align-items:center;gap:0}
+.quiz-question label span{flex:1}
+.opt-tag{font-size:.8rem;white-space:nowrap;margin-left:12px}
+.quiz-question.is-right .answer-explanation{background:#e6f2ea;border-left:4px solid #2f7a4d;color:inherit}
+.quiz-question.is-wrong .answer-explanation{background:#fbefef;border-left:4px solid #a33333;color:inherit}
+.quiz-question.is-wrong .answer-explanation strong{color:#7d2424}
+.quiz-question.is-right .answer-explanation strong{color:#1f5133}
+.quiz-question.is-wrong legend{color:#7d2424}
+.discussion-intro{max-width:760px;margin-bottom:22px}
+.discussion-intro p{margin:0 0 8px;font-size:1.05rem}
+.giscus-box{max-width:900px;min-height:200px}
+.lesson.practical{margin-top:24px}
