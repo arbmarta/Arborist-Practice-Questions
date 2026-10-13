@@ -6,9 +6,9 @@ import { useEffect, useRef } from 'react';
 // survive a change of domain or URL structure when the site moves hosts.
 export const GISCUS = {
   repo: 'arbmarta/Arborist-Practice-Questions',
-  repoId: '',       // e.g. 'R_kgDO...'
+  repoId: 'R_kgDOVGHxpQ',
   category: 'General',
-  categoryId: '',   // e.g. 'DIC_kwDO...'
+  categoryId: 'DIC_kwDOVGHxpc4DISKs',
 };
 export const giscusReady = () => !!(GISCUS.repoId && GISCUS.categoryId);
 
@@ -26,7 +26,7 @@ export default function Discussion({ term }: { term: string }) {
       'data-repo': GISCUS.repo, 'data-repo-id': GISCUS.repoId,
       'data-category': GISCUS.category, 'data-category-id': GISCUS.categoryId,
       'data-mapping': 'specific', 'data-term': term, 'data-strict': '1',
-      'data-reactions-enabled': '1', 'data-emit-metadata': '0', 'data-input-position': 'top',
+      'data-reactions-enabled': '1', 'data-emit-metadata': '0', 'data-input-position': 'bottom',
       'data-theme': 'light', 'data-lang': 'en', 'data-loading': 'lazy',
     };
     for (const [k, v] of Object.entries(attrs)) s.setAttribute(k, v);
